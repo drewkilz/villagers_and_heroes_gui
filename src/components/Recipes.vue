@@ -13,7 +13,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="recipes.length === 0">
+                <tr v-if="recipesLoading">
+                    <td colspan="7">Loading...</td>
+                </tr>
+                <tr v-else-if="recipes.length === 0">
                     <td colspan="7">No recipes available.</td>
                 </tr>
                 <tr v-else v-for="recipe in recipes" :key="recipe.id">
@@ -36,12 +39,16 @@
         name: 'Recipes',
         data() {
             return {
-                recipes: []
+                recipes: [],
+                recipesLoading: true
             }
         },
         mounted() {
             this.axiosVnhApi.get('recipes/')
-                .then(response => (this.recipes = response.data.recipes))
+                .then(response => {
+                    this.recipes = response.data.recipes
+                    this.recipesLoading = false
+                })
         }
     }
 </script>

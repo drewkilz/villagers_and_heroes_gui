@@ -1,6 +1,14 @@
 <template>
     <div id="crafting">
-        <table class="table table-striped table-hover">
+        <div v-if="emptyList && !craftingListLoading">
+            <p>No recipes selected.</p>
+            <p>
+                You can select the recipes and quantities to craft in either the
+                <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or
+                <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
+            </p>
+        </div>
+        <table v-else class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th></th>
@@ -31,27 +39,34 @@
                     -->
                 </tr>
             </thead>
-            <CraftingHeaderRow :value='"Items"'></CraftingHeaderRow>
-            <tbody v-for="objectQuantity in craftingList.items" :key="objectQuantity.name">
-                <!-- {% for object_quantity in crafting_list.items.values() %} -->
-                <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
+            <tbody v-if="emptyList && craftingListLoading">
+                <tr>
+                    <td colspan="99">Loading...</td>
+                </tr>
             </tbody>
-            <CraftingHeaderRow :value='"Refined Ingredients"'></CraftingHeaderRow>
-            <tbody v-for="objectQuantity in craftingList.refined" :key="objectQuantity.name">
-                <!-- {% for object_quantity in crafting_list.refined.values() %} -->
-                <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
-            </tbody>
-            <CraftingHeaderRow :value='"Crafting Components"'></CraftingHeaderRow>
-            <tbody v-for="objectQuantity in craftingList.components" :key="objectQuantity.name">
-                <!-- {% for object_quantity in crafting_list.components.values() %} -->
-                <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
-            </tbody>
-            <CraftingHeaderRow :value='"Final Products"'></CraftingHeaderRow>
-            <tbody v-for="objectQuantity in craftingList.list" :key="objectQuantity.name">
-                <!-- {% for object_quantity in crafting_list.list.values() %} -->
-                <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
-            </tbody>
-            <CraftingHeaderRow :value='craftingCost'></CraftingHeaderRow>
+            <template v-else>
+                <CraftingHeaderRow :value='"Items"'></CraftingHeaderRow>
+                <tbody v-for="objectQuantity in craftingList.items" :key="objectQuantity.name">
+                    <!-- {% for object_quantity in crafting_list.items.values() %} -->
+                    <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
+                </tbody>
+                <CraftingHeaderRow :value='"Refined Ingredients"'></CraftingHeaderRow>
+                <tbody v-for="objectQuantity in craftingList.refined" :key="objectQuantity.name">
+                    <!-- {% for object_quantity in crafting_list.refined.values() %} -->
+                    <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
+                </tbody>
+                <CraftingHeaderRow :value='"Crafting Components"'></CraftingHeaderRow>
+                <tbody v-for="objectQuantity in craftingList.components" :key="objectQuantity.name">
+                    <!-- {% for object_quantity in crafting_list.components.values() %} -->
+                    <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
+                </tbody>
+                <CraftingHeaderRow :value='"Final Products"'></CraftingHeaderRow>
+                <tbody v-for="objectQuantity in craftingList.list" :key="objectQuantity.name">
+                    <!-- {% for object_quantity in crafting_list.list.values() %} -->
+                    <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
+                </tbody>
+                <CraftingHeaderRow :value='craftingCost'></CraftingHeaderRow>
+            </template>
         </table>
     </div>
 </template>
@@ -68,17 +83,39 @@
         },
         data() {
             return {
-                craftingList: {}
+                craftingList: {},
+                craftingListLoading: false
+            }
+        },
+        methods: {
+            switchContent(content) {
+                return this.$emit('switch-content', content)
             }
         },
         computed: {
+            emptyList() {
+                return Object.keys(this.craftingList).length === 0
+            },
             craftingCost() {
-                return 'Crafting Cost: ' + this.craftingList.cost.gold + ' gp, ' + this.craftingList.cost.silver + ' sp, ' + this.craftingList.cost.copper + ' cp'
+                let gold = 0, silver = 0, copper = 0;
+
+                if (!this.emptyList) {
+                    gold = this.craftingList.cost.gold
+                    silver = this.craftingList.cost.silver
+                    copper = this.craftingList.cost.copper
+                }
+
+                return `Crafting Cost: ${gold} gp, ${silver} sp, ${copper} cp`
             }
         },
         mounted() {
+            this.craftingListLoading = true
+
             this.axiosVnhApi.post('crafting_list/', [{recipe: 213, quantity: 40}])
-                .then(response => (this.craftingList = response.data))
+                .then(response => {
+                    this.craftingList = response.data
+                    this.craftingListLoading = false
+                })
         }
     }
 </script>
