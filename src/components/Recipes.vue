@@ -40,7 +40,7 @@
             }
         },
         mounted() {
-            this.axiosVnhApi({url: 'recipes/'})
+            this.axiosVnhApi.get('recipes/')
                 .then(response => (this.recipes = response.data.recipes))
         }
     }

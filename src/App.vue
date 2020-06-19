@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import Crafting from './components/Crafting.vue'
 import Footer from './components/Footer.vue'
 import Home from './components/Home.vue'
 import NavBar from './components/NavBar.vue'
@@ -25,7 +26,8 @@ export default {
     Footer,
     Home,
     Recipes,
-    NotFound
+    NotFound,
+    Crafting
   },
   data() {
     return {
@@ -34,7 +36,7 @@ export default {
       currentContentTitle: 'Home',
       contentComponents: {
         home: {component: 'Home'},
-        // TODO: crafting: {component: 'Crafting'},
+        crafting: {component: 'Crafting'},
         // TODO: equipment: {component: 'Equipment'},
         recipes: {component: 'Recipes'},
         // TODO: village: {component: 'Village'},
