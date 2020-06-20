@@ -93,7 +93,7 @@
                 isBusy: false,
                 totalRows: 1,
                 currentPage: 1,
-                perPage: 5,
+                perPage: 10,
                 filter: [],
                 nameFilter: '',
                 minLevelFilter: '',
