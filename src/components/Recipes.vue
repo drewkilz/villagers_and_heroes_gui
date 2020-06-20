@@ -63,6 +63,7 @@
             <template v-slot:cell(add)>
                 [ ] <b-link href="#">Add to List</b-link>
             </template>
+            <template v-slot:table-caption>{{ totalRows }} recipes found.</template>
         </b-table>
         <b-pagination
                 v-model="currentPage"
