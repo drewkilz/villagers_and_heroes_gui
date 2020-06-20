@@ -38,11 +38,13 @@
                 fields: [
                     {key: 'name', sortable: true, stickyColumn: true},
                     {key: 'level', sortable: true},
-                    {key: 'class', sortable: true, sortByFormatted: true, filterByFormatted: true,
+                    {key: 'class', sortable: true, filterByFormatted: true,
                         formatter: 'getClassName'},
-                    {key: 'skill', sortable: true, sortByFormatted: true, filterByFormatted: true,
+                    {key: 'subclass', sortable: true, filterByFormatted: true,
+                        formatter: 'getSubClassName', label:'Sub-Class'},
+                    {key: 'skill', sortable: true, filterByFormatted: true,
                         formatter: 'getEnumValue'},
-                    {key: 'type', sortable: true, sortByFormatted: true, filterByFormatted: true,
+                    {key: 'type', sortable: true, filterByFormatted: true,
                         formatter: 'getEnumValue'},
                     {key: 'add', label: ''}
                 ],
@@ -58,6 +60,9 @@
             },
             getClassName(value, key, item) {
                 return item.item.class_.name
+            },
+            getSubClassName(value, key, item) {
+                return item.item.subclass.name
             },
             recipeProvider(ctx) {
                 this.recipesLoading = true
