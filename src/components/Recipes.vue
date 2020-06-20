@@ -119,12 +119,13 @@
                 return item.item.subclass.name
             },
             recipeProvider(ctx) {
-                console.log('Filter = ' + JSON.stringify(ctx))
                 let params = `?page=${ctx.currentPage}&perPage=${ctx.perPage}`
                 if (ctx.sortBy)
                     params = `${params}&sortBy=${ctx.sortBy}&sortOrder=${ctx.sortDesc ? 'desc' : 'asc'}`
 
-                const promise = this.axiosVnhApi.get(`recipes/${params}`)
+                const promise = this.axiosVnhApi.post(`recipes/${params}`, {
+                    filter: ctx.filter
+                })
 
                 return promise.then(response => {
                     this.totalRows = response.data.count
@@ -206,7 +207,7 @@
         },
         watch: {
             nameFilter(newVal) {
-                this.changeFilter(newVal, 'name', 'ilike')
+                this.changeFilter(`%${newVal}%`, 'name', 'ilike')
             },
             minLevelFilter(newVal) {
                 this.changeFilter(newVal, 'level', '>=', true)
