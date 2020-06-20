@@ -114,8 +114,7 @@
                 subclassOptions: [],
                 skillOptions: [],
                 typeOptions: [],
-                debounce: 200,
-                craftingList: {}
+                debounce: 200
             }
         },
         methods: {
@@ -223,11 +222,9 @@
                 this.typeFilter = []
             },
             addToList(row) {
-                let recipe = row.item
-                if (row.item.id in this.craftingList)
-                    this.craftingList[recipe.id].recipe.quantity += recipe.quantity
-                else
-                    this.craftingList[recipe.id] = recipe
+                let recipe = JSON.parse(JSON.stringify(row.item))
+
+                this.$emit('add-to-crafting-list', recipe)
 
                 this.$bvToast.toast(`Added ${recipe.quantity} ${recipe.name} to crafting list.`, {
                     toaster: 'b-toaster-bottom-center',
@@ -237,7 +234,8 @@
                     noCloseButton: true
                 })
 
-                recipe.quantity = ''
+                // Clear out the quantity entered from the UI
+                row.item.quantity = ''
             }
         },
         mounted() {
