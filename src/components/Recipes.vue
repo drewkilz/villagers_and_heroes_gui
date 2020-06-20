@@ -52,7 +52,9 @@
                             </b-form-select>
                         </b-input-group>
                     </b-th>
-                    <b-th></b-th>
+                    <b-th>
+                        <b-button v-on:click="clearFilters">Clear Filters</b-button>
+                    </b-th>
                 </b-tr>
             </template>
             <template v-slot:table-busy>
@@ -198,6 +200,16 @@
                     this.addFilter(field, op, newVal, includeOp)
                 else
                     this.removeFilter(this.filter, field, op)
+            },
+            clearFilters() {
+                this.filter = []
+                this.nameFilter = ''
+                this.minLevelFilter = ''
+                this.maxLevelFilter = ''
+                this.classFilter = []
+                this.subclassFilter = []
+                this.skillFilter = []
+                this.typeFilter = []
             }
         },
         mounted() {
