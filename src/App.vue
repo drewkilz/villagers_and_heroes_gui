@@ -70,7 +70,7 @@ export default {
 
   .container {
     padding: 15px;
-    margin: 0;
+    max-width: 100%;
   }
 
   .content-header {
