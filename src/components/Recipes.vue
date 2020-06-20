@@ -1,36 +1,32 @@
 <template>
     <div id="recipes">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Level</th>
-                    <th>Class</th>
-                    <th>Skill</th>
-                    <th>Type</th>
-                    <th>Quantity</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-if="recipesLoading">
-                    <td colspan="7">Loading...</td>
-                </tr>
-                <tr v-else-if="recipes.length === 0">
-                    <td colspan="7">No recipes available.</td>
-                </tr>
-                <tr v-else v-for="recipe in recipes" :key="recipe.id">
-                    <td>{{ recipe.name }}</td>
-                    <td>{{ recipe.level }}</td>
-                    <td>{{ recipe.class_ ? recipe.class_ : 'All' }}
-                    </td>
-                    <td>{{ recipe.skill.name }}</td>
-                    <td>{{ recipe.type.name }}</td>
-                    <td></td>
-                    <td><a href="#">Add</a></td>
-                </tr>
-            </tbody>
-        </table>
+        <b-table
+                striped
+                hover
+                responsive="true"
+                head-variant="dark"
+                :items="recipeProvider"
+                :fields="fields"
+                :busy="recipesLoading"
+                primary-key="id"
+                sort-icon-left
+                :current-page="currentPage"
+                :per-page="perPage">
+            <template v-slot:table-busy>
+                <div class="text-center">
+                    <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
+                </div>
+            </template>
+            <template v-slot:cell(add)>
+                [ ] <b-link href="#">Add to List</b-link>
+            </template>
+        </b-table>
+        <b-pagination
+                v-model="currentPage"
+                :total-rows="totalRows"
+                :per-page="perPage"
+                align="fill"
+                size="sm"></b-pagination>
     </div>
 </template>
 
@@ -39,8 +35,44 @@
         name: 'Recipes',
         data() {
             return {
-                recipes: [],
-                recipesLoading: true
+                fields: [
+                    {key: 'name', sortable: true, stickyColumn: true},
+                    {key: 'level', sortable: true},
+                    {key: 'class', sortable: true, sortByFormatted: true, filterByFormatted: true,
+                        formatter: 'getClassName'},
+                    {key: 'skill', sortable: true, sortByFormatted: true, filterByFormatted: true,
+                        formatter: 'getEnumValue'},
+                    {key: 'type', sortable: true, sortByFormatted: true, filterByFormatted: true,
+                        formatter: 'getEnumValue'},
+                    {key: 'add', label: ''}
+                ],
+                recipesLoading: false,
+                totalRows: 1,
+                currentPage: 1,
+                perPage: 5
+            }
+        },
+        methods: {
+            getEnumValue(value) {
+                return `${value.name}`
+            },
+            getClassName(value, key, item) {
+                return item.item.class_.name
+            },
+            recipeProvider(ctx) {
+                this.recipesLoading = true
+
+                let params = `?page=${ctx.currentPage}&perPage=${ctx.perPage}`
+                if (ctx.sortBy)
+                    params = `${params}&sortBy=${ctx.sortBy}&sortOrder=${ctx.sortDesc ? 'desc' : 'asc'}`
+
+                const promise = this.axiosVnhApi.get(`recipes/${params}`)
+
+                return promise.then(response => {
+                    this.recipesLoading = false
+                    this.totalRows = response.data.count
+                    return response.data.recipes || []
+                })
             }
         },
         mounted() {
