@@ -7,7 +7,7 @@
                 head-variant="dark"
                 :items="recipeProvider"
                 :fields="fields"
-                :busy="recipesLoading"
+                :busy="isBusy"
                 primary-key="id"
                 sort-icon-left
                 :current-page="currentPage"
@@ -88,7 +88,7 @@
                     {key: 'type', sortable: true, formatter: 'getEnumValue'},
                     {key: 'add', label: ''}
                 ],
-                recipesLoading: false,
+                isBusy: false,
                 totalRows: 1,
                 currentPage: 1,
                 perPage: 5,
@@ -117,8 +117,6 @@
                 return item.item.subclass.name
             },
             recipeProvider(ctx) {
-                this.recipesLoading = true
-
                 let params = `?page=${ctx.currentPage}&perPage=${ctx.perPage}`
                 if (ctx.sortBy)
                     params = `${params}&sortBy=${ctx.sortBy}&sortOrder=${ctx.sortDesc ? 'desc' : 'asc'}`
@@ -126,9 +124,10 @@
                 const promise = this.axiosVnhApi.get(`recipes/${params}`)
 
                 return promise.then(response => {
-                    this.recipesLoading = false
                     this.totalRows = response.data.count
                     return response.data.recipes || []
+                }).catch(() => {
+                    return []
                 })
             },
             getCategoryOptions(categoryName) {
