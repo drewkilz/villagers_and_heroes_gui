@@ -62,8 +62,11 @@
                     <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
                 </div>
             </template>
-            <template v-slot:cell(add)>
-                [ ] <b-link href="#">Add to List</b-link>
+            <template v-slot:cell(add)="row">
+                <b-input-group size="sm">
+                    <b-form-input v-model="row.item.quantity" size="sm" style="width: 42px" :debounce="debounce" type="number" placeholder="qty" number min="1" step="1"></b-form-input>
+                    <b-button size="sm" @click="addToList(row)" v-b-tooltip:hover title="Add to Crafting List"><b-icon-cart-plus></b-icon-cart-plus></b-button>
+                </b-input-group>
             </template>
             <template v-slot:table-caption>{{ totalRows }} recipes found.</template>
         </b-table>
@@ -108,7 +111,8 @@
                 subclassOptions: [],
                 skillOptions: [],
                 typeOptions: [],
-                debounce: 200
+                debounce: 200,
+                craftingList: {}
             }
         },
         methods: {
@@ -214,6 +218,23 @@
                 this.subclassFilter = []
                 this.skillFilter = []
                 this.typeFilter = []
+            },
+            addToList(row) {
+                let recipe = row.item
+                if (row.item.id in this.craftingList)
+                    this.craftingList[recipe.id].recipe.quantity += recipe.quantity
+                else
+                    this.craftingList[recipe.id] = recipe
+
+                this.$bvToast.toast(`Added ${recipe.quantity} ${recipe.name} to crafting list.`, {
+                    toaster: 'b-toaster-bottom-center',
+                    appendToast: true,
+                    variant: 'success',
+                    autoHideDelay: 2000,
+                    noCloseButton: true
+                })
+
+                recipe.quantity = ''
             }
         },
         mounted() {
