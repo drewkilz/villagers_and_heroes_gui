@@ -78,11 +78,7 @@
         let items = []
 
         for (let key in this.craftingList) {
-          let recipe = this.craftingList[key]
-
-          console.log(JSON.stringify(recipe))
-
-          items.push(recipe)
+          items.push(this.craftingList[key])
         }
 
         items.sort(compareValues('name'))
