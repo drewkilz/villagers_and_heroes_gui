@@ -30,25 +30,25 @@
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="classFilter" :options="classOptions" multiple><!-- TODO: select-size="2"-->
+                            <b-form-select v-model="classFilter" :options="classOptions" multiple>
                             </b-form-select>
                         </b-input-group>
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="subclassFilter" :options="subclassOptions" multiple><!-- TODO: select-size="2"-->
+                            <b-form-select v-model="subclassFilter" :options="subclassOptions" multiple>
                             </b-form-select>
                         </b-input-group>
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="skillFilter" :options="skillOptions" multiple><!-- TODO: select-size="2"-->
+                            <b-form-select v-model="skillFilter" :options="skillOptions" multiple>
                             </b-form-select>
                         </b-input-group>
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="typeFilter" :options="typeOptions" multiple><!-- TODO: select-size="2"-->
+                            <b-form-select v-model="typeFilter" :options="typeOptions" multiple>
                             </b-form-select>
                         </b-input-group>
                     </b-th>
@@ -247,3 +247,11 @@
         }
     }
 </script>
+
+<style>
+    /* Modify the select filter boxes to be three lines - select-size is only respected by some browsers and causes warnings in Vue, so use CSS instead */
+    .custom-select {
+        max-height: 69px;
+        overflow: auto;
+    }
+</style>
