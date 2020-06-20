@@ -8,6 +8,7 @@
                 :items="recipeProvider"
                 :fields="fields"
                 :busy="isBusy"
+                :filter="filter"
                 primary-key="id"
                 sort-icon-left
                 :current-page="currentPage"
@@ -29,25 +30,25 @@
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="classFilter" :options="classOptions" multiple select-size="2">
+                            <b-form-select v-model="classFilter" :options="classOptions" multiple><!-- TODO: select-size="2"-->
                             </b-form-select>
                         </b-input-group>
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="subclassFilter" :options="subclassOptions" multiple select-size="2">
+                            <b-form-select v-model="subclassFilter" :options="subclassOptions" multiple><!-- TODO: select-size="2"-->
                             </b-form-select>
                         </b-input-group>
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="skillFilter" :options="skillOptions" multiple select-size="2">
+                            <b-form-select v-model="skillFilter" :options="skillOptions" multiple><!-- TODO: select-size="2"-->
                             </b-form-select>
                         </b-input-group>
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
-                            <b-form-select v-model="typeFilter" :options="typeOptions" multiple select-size="2">
+                            <b-form-select v-model="typeFilter" :options="typeOptions" multiple><!-- TODO: select-size="2"-->
                             </b-form-select>
                         </b-input-group>
                     </b-th>
@@ -92,6 +93,7 @@
                 totalRows: 1,
                 currentPage: 1,
                 perPage: 5,
+                filter: [],
                 nameFilter: '',
                 minLevelFilter: '',
                 maxLevelFilter: '',
@@ -117,6 +119,7 @@
                 return item.item.subclass.name
             },
             recipeProvider(ctx) {
+                console.log('Filter = ' + JSON.stringify(ctx))
                 let params = `?page=${ctx.currentPage}&perPage=${ctx.perPage}`
                 if (ctx.sortBy)
                     params = `${params}&sortBy=${ctx.sortBy}&sortOrder=${ctx.sortDesc ? 'desc' : 'asc'}`
@@ -150,6 +153,49 @@
                 .catch(() => {
                     return []
                 })
+            },
+            removeFilter(filter, field, op) {
+                for (let index = filter.length; index--;)
+                    if (filter[index]['field'] === field) {
+                        if (op) {
+                            if (filter[index]['op'] === op)
+                                filter.splice(index, 1)
+                        }
+                        else
+                            filter.splice(index, 1)
+                    }
+            },
+            addFilter(field, op, value, includeOp) {
+                // Set up a local filter_ based off of the component's filter
+                let filter_ = []
+                if (this.filter)
+                    filter_ = this.filter
+
+                // If the field already exists in the filter, remove it as we will be replacing it
+                if (includeOp)
+                    this.removeFilter(filter_, field, op)
+                else
+                    this.removeFilter(filter_, field)
+
+                // Add the new filter
+                filter_.push({field: field, op: op, value: value})
+
+                // Set the component's filter to the local filter to trigger a filtering event
+                this.filter = filter_
+            },
+            changeFilter(newVal, field, op, includeOp) {
+                let addFilter = false
+                if (typeof(newVal) === 'object') {
+                    if (newVal.length > 0)
+                        addFilter = true
+                }
+                else if (newVal)
+                    addFilter = true
+
+                if (addFilter)
+                    this.addFilter(field, op, newVal, includeOp)
+                else
+                    this.removeFilter(this.filter, field, op)
             }
         },
         mounted() {
@@ -157,6 +203,29 @@
             this.getCategoryOptions('Sub Class').then(data => {this.subclassOptions = data})
             this.getCategoryOptions('Skill').then(data => {this.skillOptions = data})
             this.getCategoryOptions('Crafting Type').then(data => {this.typeOptions = data})
+        },
+        watch: {
+            nameFilter(newVal) {
+                this.changeFilter(newVal, 'name', 'ilike')
+            },
+            minLevelFilter(newVal) {
+                this.changeFilter(newVal, 'level', '>=', true)
+            },
+            maxLevelFilter(newVal) {
+                this.changeFilter(newVal, 'level', '<=', true)
+            },
+            classFilter(newVal) {
+                this.changeFilter(newVal, 'class', 'in')
+            },
+            subclassFilter(newVal) {
+                this.changeFilter(newVal, 'subclass', 'in')
+            },
+            skillFilter(newVal) {
+                this.changeFilter(newVal, 'skill', 'in')
+            },
+            typeFilter(newVal) {
+                this.changeFilter(newVal, 'type', 'in')
+            }
         }
     }
 </script>
