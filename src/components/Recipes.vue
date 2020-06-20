@@ -137,8 +137,12 @@
                     return []
                 })
             },
-            getCategoryOptions(categoryName) {
-                return this.axiosVnhApi.get(`categories/${categoryName}`)
+            getCategoryOptions(categoryName, skillType) {
+                let url = `categories/${categoryName}`
+                if (skillType)
+                    url = `skills/${skillType}`
+
+                return this.axiosVnhApi.get(url)
                     .then(response => {
                         let options = []
 
@@ -215,7 +219,7 @@
         mounted() {
             this.getCategoryOptions('Class').then(data => {this.classOptions = data})
             this.getCategoryOptions('Sub Class').then(data => {this.subclassOptions = data})
-            this.getCategoryOptions('Skill').then(data => {this.skillOptions = data})
+            this.getCategoryOptions('Skill', 'Crafting').then(data => {this.skillOptions = data})
             this.getCategoryOptions('Crafting Type').then(data => {this.typeOptions = data})
         },
         watch: {
