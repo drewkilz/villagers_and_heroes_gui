@@ -75,7 +75,10 @@
                 :total-rows="totalRows"
                 :per-page="perPage"
                 align="fill"
-                size="sm"></b-pagination>
+                size="sm"
+                limit="10"
+                first-number
+                last-number></b-pagination>
     </div>
 </template>
 
