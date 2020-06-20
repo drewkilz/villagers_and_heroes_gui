@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -17,10 +17,10 @@ const axios = require('axios')
 
 Vue.prototype.axiosVnhApi = axios.create({baseURL: process.env.VUE_APP_VNH_API_URL})
 Vue.prototype.axiosVnhApi.interceptors.request.use(function (config) {
-  config.headers.Authorization = 'Bearer ' + process.env.VUE_APP_VNH_API_TOKEN
-  return config
+    config.headers.Authorization = 'Bearer ' + process.env.VUE_APP_VNH_API_TOKEN
+    return config
 })
 
 new Vue({
-  render: h => h(App),
+    render: h => h(App),
 }).$mount('#app')
