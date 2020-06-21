@@ -1,6 +1,10 @@
 <template>
     <div>
         <p>This website contains a series of tools to supplement your gaming experience in Villagers & Heroes.</p>
+        <p class="font-weight-light font-italic">
+            NOTE: This website is hosted on a free Heroku server, so the first data query may take up to 30 seconds to
+            start the application. Be patient.
+        </p>
         <dt><b-link href="#" v-on:click="switchContent('crafting')">Crafting</b-link></dt>
         <dd>
             Allows you to calculate the items, refined ingredients, and crafting components you will need to make recipes.
