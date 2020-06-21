@@ -12,7 +12,7 @@
                         <a href="https://www.madottergames.com" target="_blank" rel="noopener">Mad Otter Games</a>
                     </b-col>
                     <b-col cols="6" md="2" class="text-right">
-                        <b-link href="/credits">Credits</b-link>
+                        <b-link href="#" v-on:click="switchContent('credits')">Credits</b-link>
                     </b-col>
                 </b-row>
             </div>
@@ -22,7 +22,12 @@
 
 <script>
     export default {
-        name: 'Footer'
+        name: 'Footer',
+        methods: {
+            switchContent(content) {
+                return this.$emit('switch-content', content)
+            }
+        }
     }
 </script>
 

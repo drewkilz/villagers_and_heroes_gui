@@ -11,12 +11,13 @@
                        :craftingList="craftingList"
                        @add-to-crafting-list="addToCraftingList"></component>
         </b-container>
-        <Footer></Footer>
+        <Footer @switch-content="switchContent"></Footer>
     </div>
 </template>
 
 <script>
     import Crafting from './components/Crafting.vue'
+    import Credits from './components/Credits.vue'
     import Footer from './components/Footer.vue'
     import Home from './components/Home.vue'
     import NavBar from './components/NavBar.vue'
@@ -31,7 +32,8 @@
             Home,
             Recipes,
             NotFound,
-            Crafting
+            Crafting,
+            Credits
         },
         data() {
             return {
@@ -39,13 +41,15 @@
                 currentContentComponent: 'Home',
                 currentContentTitle: 'Home',
                 contentComponents: {
+                    // TODO: Use vue.router
                     home: {component: 'Home'},
                     crafting: {component: 'Crafting'},
                     // TODO: equipment: {component: 'Equipment'},
                     recipes: {component: 'Recipes'},
                     // TODO: village: {component: 'Village'},
                     // TODO: party: {component: 'Party', title: 'Crafting Party'},
-                    notFound: {component: 'NotFound', title: '404 :: Not Found'}
+                    notFound: {component: 'NotFound', title: '404 :: Not Found'},
+                    credits: {component: 'Credits'}
                 },
                 craftingList: {}
             }
