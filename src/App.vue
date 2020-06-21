@@ -80,6 +80,16 @@
             clearCraftingList() {
                 this.craftingList = {}
             }
+        },
+        created() {
+            // Wake up the API in Heroku on loading the GUI if it's not awake, otherwise a significant delay occurs
+            return this.axiosVnhApi.get('/')
+                .then(() => {
+                    return []
+                })
+                .catch(() => {
+                    return []
+                })
         }
     }
 </script>
