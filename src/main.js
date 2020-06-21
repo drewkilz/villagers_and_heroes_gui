@@ -21,6 +21,16 @@ Vue.prototype.axiosVnhApi.interceptors.request.use(function (config) {
     return config
 })
 
+// Wake up the API in Heroku on loading the GUI if it's not awake, otherwise a significant delay occurs
+Vue.prototype.axiosVnhApi.get('/')
+    .then(() => {
+        console.log('API is alive.')
+        return []
+    })
+    .catch(() => {
+        return []
+    })
+
 new Vue({
     render: h => h(App),
 }).$mount('#app')
