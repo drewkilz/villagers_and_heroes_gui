@@ -46,22 +46,22 @@
             </tbody>
             <template v-else>
                 <CraftingHeaderRow :value='"Items"'></CraftingHeaderRow>
-                <tbody v-for="objectQuantity in craftingList.items" :key="objectQuantity.name">
+                <tbody v-for="objectQuantity in craftingList_.items" :key="objectQuantity.name">
                     <!-- {% for object_quantity in crafting_list.items.values() %} -->
                     <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
                 </tbody>
                 <CraftingHeaderRow :value='"Refined Ingredients"'></CraftingHeaderRow>
-                <tbody v-for="objectQuantity in craftingList.refined" :key="objectQuantity.name">
+                <tbody v-for="objectQuantity in craftingList_.refined" :key="objectQuantity.name">
                     <!-- {% for object_quantity in crafting_list.refined.values() %} -->
                     <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
                 </tbody>
                 <CraftingHeaderRow :value='"Crafting Components"'></CraftingHeaderRow>
-                <tbody v-for="objectQuantity in craftingList.components" :key="objectQuantity.name">
+                <tbody v-for="objectQuantity in craftingList_.components" :key="objectQuantity.name">
                     <!-- {% for object_quantity in crafting_list.components.values() %} -->
                     <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
                 </tbody>
                 <CraftingHeaderRow :value='"Final Products"'></CraftingHeaderRow>
-                <tbody v-for="objectQuantity in craftingList.list" :key="objectQuantity.name">
+                <tbody v-for="objectQuantity in craftingList_.list" :key="objectQuantity.name">
                     <!-- {% for object_quantity in crafting_list.list.values() %} -->
                     <CraftingItemRow :objectQuantity="objectQuantity"></CraftingItemRow>
                 </tbody>
@@ -77,13 +77,19 @@
 
     export default {
         name: 'Crafting',
+        props: {
+            craftingList: {
+                type: Object,
+                required: true
+            }
+        },
         components: {
             CraftingHeaderRow,
             CraftingItemRow
         },
         data() {
             return {
-                craftingList: {},
+                craftingList_: {},
                 craftingListLoading: false
             }
         },
@@ -94,15 +100,15 @@
         },
         computed: {
             emptyList() {
-                return Object.keys(this.craftingList).length === 0
+                return Object.keys(this.craftingList_).length === 0
             },
             craftingCost() {
                 let gold = 0, silver = 0, copper = 0;
 
                 if (!this.emptyList) {
-                    gold = this.craftingList.cost.gold
-                    silver = this.craftingList.cost.silver
-                    copper = this.craftingList.cost.copper
+                    gold = this.craftingList_.cost.gold
+                    silver = this.craftingList_.cost.silver
+                    copper = this.craftingList_.cost.copper
                 }
 
                 return `Crafting Cost: ${gold} gp, ${silver} sp, ${copper} cp`
@@ -111,11 +117,22 @@
         mounted() {
             this.craftingListLoading = true
 
-            this.axiosVnhApi.post('crafting_list/', [{recipe: 213, quantity: 40}])
-                .then(response => {
-                    this.craftingList = response.data
-                    this.craftingListLoading = false
-                })
+            let post_data = []
+
+            for (let key in this.craftingList) {
+                let recipe = this.craftingList[key]
+                post_data.push({recipe: recipe.id, quantity: recipe.quantity})
+            }
+
+            if (post_data.length)
+                this.axiosVnhApi.post('crafting_list/', post_data)
+                    .then(response => {
+                        this.craftingList_ = response.data
+                        console.log(JSON.stringify(response.data))
+                        this.craftingListLoading = false
+                    })
+            else
+                this.craftingListLoading = false
         }
     }
 </script>
