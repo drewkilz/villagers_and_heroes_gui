@@ -8,11 +8,15 @@
                 <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
             </p>
         </div>
+        <!-- TODO: Implement a crafting list view where you can review and add/remove/update quantities before finalizing the crafting list -->
+        <!-- TODO: Add in an options panel for salvaging, percentages, etc. -->
+        <!-- TODO: potentially change to b-table -->
         <table v-else class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th></th>
                     <!--
+                    TODO: Implement Needed and Obtained with textboxes
                     <th colspan="3" class="text-center">Needed</th>
                     <th colspan="3" class="text-center">Obtained</th>
                     -->
@@ -24,6 +28,7 @@
                 <tr>
                     <th>Name</th>
                     <!--
+                    TODO: Needed and Obtained with textboxes
                     <th class="text-center">Stacks</th>
                     <th class="text-center">Individual</th>
                     <th class="text-center">Total</th>
@@ -35,12 +40,14 @@
                     <th class="text-center">Individual</th>
                     <th class="text-center">Total</th>
                     <!--
+                    TODO: Source
                     <th>Source</th>
                     -->
                 </tr>
             </thead>
             <tbody v-if="emptyList && craftingListLoading">
                 <tr>
+                    <!-- TODO: Upgrade to the nice busy loading symbol -->
                     <td colspan="99">Loading...</td>
                 </tr>
             </tbody>
