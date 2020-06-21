@@ -12,7 +12,8 @@
                 primary-key="id"
                 sort-icon-left
                 :current-page="currentPage"
-                :per-page="perPage">
+                :per-page="perPage"
+                small>
             <template v-slot:thead-top>
                 <b-tr class="thead-light">
                     <b-th>
