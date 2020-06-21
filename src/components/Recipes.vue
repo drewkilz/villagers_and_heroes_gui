@@ -57,6 +57,8 @@
                     </b-th>
                 </b-tr>
             </template>
+            <!-- TODO: Add links to Wiki page for items -->
+            <!-- TODO: Add popup with recipe details -->
             <template v-slot:table-busy>
                 <div class="text-center">
                     <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>

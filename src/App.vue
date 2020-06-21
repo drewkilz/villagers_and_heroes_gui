@@ -44,7 +44,7 @@
                     // TODO: Use vue.router
                     home: {component: 'Home'},
                     crafting: {component: 'Crafting'},
-                    // TODO: equipment: {component: 'Equipment'},
+                    // TODO: equipment: {component: 'Equipment'}, <!-- TODO: As part of the equipment, enable a way to select all for a series of levels? like 16-29, for example? -->
                     recipes: {component: 'Recipes'},
                     // TODO: village: {component: 'Village'},
                     // TODO: party: {component: 'Party', title: 'Crafting Party'},
