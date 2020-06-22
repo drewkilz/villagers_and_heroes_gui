@@ -58,6 +58,19 @@
                     </b-th>
                 </b-tr>
             </template>
+            <template v-slot:head(add)>
+                <div id="header-add">Crafting List</div>
+                <b-popover
+                        target="header-add"
+                        placement="left"
+                        triggers="hover focus">
+                    <template v-slot:title>Add to Crafting List</template>
+                    <div>
+                        Enter a quantity then click the <b-icon-cart-plus></b-icon-cart-plus> icon to the right to add
+                        the recipe to your Crafting List.
+                    </div>
+                </b-popover>
+            </template>
             <!-- TODO: Add links to Wiki page for items -->
             <!-- TODO: Add popup with recipe details -->
             <template v-slot:table-busy>
