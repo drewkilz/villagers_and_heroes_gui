@@ -71,14 +71,31 @@
                     </div>
                 </b-popover>
             </template>
-            <!-- TODO: Add popup with recipe details -->
             <template v-slot:table-busy>
                 <div class="text-center">
                     <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
                 </div>
             </template>
             <template v-slot:cell(name)="row">
-                <b-link :href="getWikiLink(row.item.name)" target="_blank" rel="noopener">{{ row.item.name }}</b-link>
+                <b-link :id="getRowItemId(row.index, 'name-link')"
+                        :href="getWikiLink(row.item.item.name)"
+                        target="_blank"
+                        rel="noopener">
+                    {{ row.item.name }}
+                </b-link>
+                <b-popover
+                        :target="getRowItemId(row.index, 'name-link')"
+                        placement="bottomright"
+                        triggers="hover focus">
+                    <template v-slot:title>{{ row.item.name }}</template>
+                    <ul>
+                        <li v-for="ingredient in row.item.ingredients" :key="ingredient.id">
+                            {{ ingredient.quantity }}
+                            {{ ingredient.item.name }}
+                        </li>
+                        <li v-if="row.item.cost > 0">{{row.item.cost | craftingCostFilter }}</li>
+                    </ul>
+                </b-popover>
             </template>
             <template v-slot:cell(add)="row">
                 <b-input-group size="sm">
@@ -136,6 +153,9 @@
             }
         },
         methods: {
+            getRowItemId(index, name) {
+                return `recipes-${name}-${index}`
+            },
             getEnumValue(value) {
                 return `${value.name}`
             },

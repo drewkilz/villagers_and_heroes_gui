@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import App from './App.vue'
+import {CraftingCost} from "@/utility"
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
@@ -30,6 +31,10 @@ Vue.prototype.axiosVnhApi.get('/')
     .catch(() => {
         return []
     })
+
+Vue.filter('craftingCostFilter', function (total) {
+    return new CraftingCost(total)
+})
 
 new Vue({
     render: h => h(App),

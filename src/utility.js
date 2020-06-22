@@ -21,3 +21,15 @@ export function compareValues(key, order = 'asc') {
         )
     }
 }
+
+export class CraftingCost {
+    constructor(total) {
+        this.gold = Math.trunc(total)
+        this.silver = Math.trunc(total * 100 - this.gold * 100)
+        this.copper = Math.trunc(total * 10000 - this.gold * 10000 - this.silver * 100)
+        this.total = total
+    }
+    toString() {
+        return `${this.gold}g, ${this.silver}s, ${this.copper}c`
+    }
+}
