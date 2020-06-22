@@ -71,12 +71,14 @@
                     </div>
                 </b-popover>
             </template>
-            <!-- TODO: Add links to Wiki page for items -->
             <!-- TODO: Add popup with recipe details -->
             <template v-slot:table-busy>
                 <div class="text-center">
                     <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
                 </div>
+            </template>
+            <template v-slot:cell(name)="row">
+                <b-link :href="getWikiLink(row.item.name)" target="_blank" rel="noopener">{{ row.item.name }}</b-link>
             </template>
             <template v-slot:cell(add)="row">
                 <b-input-group size="sm">
@@ -252,6 +254,9 @@
 
                 // Clear out the quantity entered from the UI
                 row.item.quantity = ''
+            },
+            getWikiLink(page) {
+                return `https://villagersandheroes.gamepedia.com/${encodeURI(page.replace(' ', '_'))}`
             }
         },
         mounted() {
