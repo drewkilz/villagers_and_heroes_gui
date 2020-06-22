@@ -19,7 +19,7 @@
                 </b-nav-item>
                 <b-popover
                         target="crafting-list-icon"
-                        placement="bottomleft"
+                        placement="left"
                         triggers="hover focus">
                     <template v-slot:title>Crafting List</template>
                     <b-table
