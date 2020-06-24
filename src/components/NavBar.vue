@@ -14,7 +14,7 @@
             </b-collapse>
             <b-navbar-nav class="ml-auto">
                 <b-nav-item right id="crafting-list-icon">
-                    <span v-if="Object.keys(craftingList).length">({{ Object.keys(craftingList).length }}) </span>
+                    <span v-if="craftingListCount" :key="craftingListCount">({{ craftingListCount }}) </span>
                     <b-icon-cart></b-icon-cart>
                 </b-nav-item>
                 <b-popover
@@ -32,7 +32,7 @@
                         <template v-slot:cell(quantity)="data">
                             <div class="text-center">{{ data.value }}</div>
                         </template>
-                        <template v-slot:table-caption>{{ Object.keys(craftingList).length }} recipes found.</template>
+                        <template v-slot:table-caption>{{ craftingList.count }} recipes found.</template>
                     </b-table>
                 </b-popover>
                 <b-nav-item right>
@@ -47,7 +47,8 @@
 </template>
 
 <script>
-    import {compareValues} from "@/utility";
+    import { compareValues } from "@/utility"
+    import { CraftingList } from "@/crafting"
 
     export default {
         name: 'NavBar',
@@ -57,7 +58,7 @@
                 required: true
             },
             craftingList: {
-                type: Object,
+                type: CraftingList,
                 required: true
             }
         },
@@ -66,7 +67,8 @@
                 craftingListFields: [
                     {key: 'name'},
                     {key: 'quantity'}
-                ]
+                ],
+                craftingListCount: 0
             }
         },
         methods: {
@@ -79,13 +81,16 @@
             craftingListItems() {
                 let items = []
 
-                for (let key in this.craftingList) {
-                    items.push(this.craftingList[key])
+                for (let key in this.craftingList.list) {
+                    items.push(this.craftingList.list[key])
                 }
 
                 items.sort(compareValues('name'))
 
                 return items
+            },
+            updateCraftingListCount() {
+                this.craftingListCount = this.craftingList.count
             }
         }
     }

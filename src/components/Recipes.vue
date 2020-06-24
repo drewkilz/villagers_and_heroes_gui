@@ -262,7 +262,7 @@
             addToList(row) {
                 let recipe = JSON.parse(JSON.stringify(row.item))
 
-                this.$emit('add-to-crafting-list', recipe)
+                this.$emit('add-to-crafting-list', recipe, recipe.quantity || 1)
 
                 this.$bvToast.toast(`Added ${recipe.quantity} ${recipe.name} to crafting list.`, {
                     toaster: 'b-toaster-bottom-center',

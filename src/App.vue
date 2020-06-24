@@ -3,7 +3,8 @@
         <NavBar :title="title"
                 @switch-content="switchContent"
                 :craftingList="craftingList"
-                @clear-crafting-list="clearCraftingList"></NavBar>
+                @clear-crafting-list="clearCraftingList"
+                ref="navBar"></NavBar>
         <b-container>
             <div class="content-header">.: {{ currentContentTitle }} :.</div>
             <component v-bind:is="currentContentComponent"
@@ -23,6 +24,7 @@
     import NavBar from './components/NavBar.vue'
     import NotFound from './components/NotFound.vue'
     import Recipes from './components/Recipes.vue'
+    import  { CraftingList } from './crafting.js'
 
     export default {
         name: 'App',
@@ -51,7 +53,7 @@
                     notFound: {component: 'NotFound', title: '404 :: Not Found'},
                     credits: {component: 'Credits'}
                 },
-                craftingList: {}
+                craftingList: new CraftingList()
             }
         },
         methods: {
@@ -65,20 +67,13 @@
                     this.contentComponents[componentKey]['title'] :
                     this.contentComponents[componentKey]['component']
             },
-            addToCraftingList(recipe) {
-                // Create a local copy to re-assign later to trigger reactivity in children components - couldn't get it to work
-                //  any other way
-                let craftingList = JSON.parse(JSON.stringify(this.craftingList))
-
-                if (recipe.id in craftingList)
-                    craftingList[recipe.id].quantity += recipe.quantity
-                else
-                    craftingList[recipe.id] = recipe
-
-                this.craftingList = craftingList
+            addToCraftingList(recipe, quantity) {
+                this.craftingList.add(recipe, quantity)
+                this.$refs.navBar.updateCraftingListCount()
             },
             clearCraftingList() {
-                this.craftingList = {}
+                this.craftingList.reset(true)
+                this.$refs.navBar.updateCraftingListCount()
             }
         }
     }
