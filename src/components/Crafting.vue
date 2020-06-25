@@ -61,6 +61,7 @@
     import CraftingItemRow from './CraftingItemRow.vue'
     import { CraftingCost } from "@/utility"
     import { CraftingList, Quantity } from '@/crafting.js'
+    import {getRecipe} from "@/vnhApi";
 
     export default {
         name: 'Crafting',
@@ -77,9 +78,6 @@
         data() {
             return {
                 items: [],
-                refined: [],
-                components: [],
-                list: [],
                 fields: [
                     {key: 'name', stickyColumn: true, label: 'Items'},
                     {key: 'needed', label: ''},
@@ -95,10 +93,17 @@
                 return this.$emit('switch-content', content)
             },
             valueChange(item, quantity) {
-                item.neededQuantity.total = item.quantity.total - quantity.total
+                let object = this.craftingList.find(item.name)
 
-                for (let ingredient in item.ingredients) {
-                    console.log(JSON.stringify(ingredient))
+                console.log(`object=${JSON.stringify(object)}`)
+
+                object.neededQuantity.total = item.quantity.total - quantity.total
+
+                for (let key in item.ingredients) {
+                    let ingredient = item.ingredients[key]
+                    console.log(`ingredient=${JSON.stringify(ingredient)}`)
+                    // name, quantity
+                    this.valueChange(ingredient.item, new Quantity(ingredient.quantity))
                 }
             },
             getTotalCost(cost) {
@@ -109,22 +114,26 @@
 
                 this.items = []
 
-                this.craftingList.calculate().then(() => {
-                    let locals = ['items', 'refined', 'components', 'list']
-                    for (let index in locals) {
-                        let listName = locals[index]
-                        for (let key in this.craftingList[listName]) {
-                            let object = this.craftingList[listName][key]
-                            object.neededQuantity = object.quantity.clone()
-                            object.obtainedQuantity = new Quantity(0, object.quantity.stack_size ?
-                                object.quantity.stack_size :
-                                object.item.stack_size)
+                getRecipe("Oread's Axe").then(recipe => {
+                    this.craftingList.reset()
+                    this.craftingList.add(recipe, 5)
+                    this.craftingList.calculate().then(() => {
+                        let locals = ['items', 'refined', 'components', 'list']
+                        for (let index in locals) {
+                            let listName = locals[index]
+                            for (let key in this.craftingList[listName]) {
+                                let object = this.craftingList[listName][key]
+                                object.neededQuantity = object.quantity.clone()
+                                object.obtainedQuantity = new Quantity(0, object.quantity.stack_size ?
+                                    object.quantity.stack_size :
+                                    object.item.stack_size)
 
-                            this[listName].push(object)
+                                this.items.push(object)
+                            }
                         }
-                    }
 
-                    this.isBusy = false
+                        this.isBusy = false
+                    })
                 })
             }
         },

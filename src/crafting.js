@@ -55,6 +55,21 @@ export class CraftingList {
         return Object.keys(this.list).length
     }
 
+    find(name) {
+        console.log(`find(name=${name})`)
+        let locals = [this.items, this.refined, this.components]
+
+        for (let key in locals) {
+            console.log(`key: ${key}, locals[key]: ${JSON.stringify(locals[key])}`)
+            if (name in locals[key]) {
+                console.log(`Found!`)
+                return locals[key][name]
+            }
+        }
+
+        return null
+    }
+
     async _calculate(recipe, quantity) {
         let quantity_ = quantity
 

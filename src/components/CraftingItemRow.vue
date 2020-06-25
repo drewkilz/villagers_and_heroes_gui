@@ -64,6 +64,15 @@
                 if (item.type.name === 'Plant') {
                     return `Plant Lore (${item.level}-${item.level+14})`
                 }
+                else if (item.type.name === 'Bug') {
+                    return `Bug Lore (${item.level}-${item.level+14})`
+                }
+                else if (item.type.name === 'Mineral') {
+                    return `Mining (${item.level}-${item.level+14})`
+                }
+                else if (item.type.name === 'Fish') {
+                    return `Fishing (${item.level}-${item.level+14})`
+                }
                 else if (item.skill) {
                     return `${item.skill.name} (${item.level})`
                 }
