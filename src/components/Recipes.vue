@@ -118,7 +118,7 @@
 </template>
 
 <script>
-    import { compareValues } from '../utility.js'
+    import { compareValues, getWikiLink } from '../utility.js'
 
     export default {
         name: 'Recipes',
@@ -276,7 +276,7 @@
                 row.item.quantity = ''
             },
             getWikiLink(page) {
-                return `https://villagersandheroes.gamepedia.com/${encodeURI(page.replace(' ', '_'))}`
+                return getWikiLink(page)
             }
         },
         mounted() {

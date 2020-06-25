@@ -100,24 +100,23 @@ export class CraftingList {
 
                 key = subRecipe.name
                 object_ = subRecipe
+                object_.quantity = new Quantity(quantity_ * ingredient.quantity, subRecipe.item.stack_size)
             } else {
                 // Just an item, not a recipe
                 currentList = this.items
                 key = ingredient.item.name
                 object_ = ingredient.item
+                object_.quantity = new Quantity(quantity_ * ingredient.quantity, object_.stack_size)
             }
 
-            // Add the sub recipe to the crafting list
-            if (!(key in currentList))
+            // Add the sub recipe / item to the crafting list
+            if (!(key in currentList)) {
                 currentList[key] = object_
-
-            object_ = currentList[key]
-
-            if (!(object_.quantity))
-                object_.quantity = new Quantity(0, object_.stack_size)
-
-            object_.quantity.total += quantity_ * ingredient.quantity
+            }
         }
+
+        // Replace the quantity with a new Quantity object that does what we need it to
+        recipe.quantity = new Quantity(recipe.quantity, recipe.item.stack_size)
 
         this.cost += (recipe.cost * quantity)
     }
@@ -140,10 +139,16 @@ export class Quantity {
     }
 
     get stacks() {
+        if (this.stack_size === null )
+            return null
+
         return Math.trunc(this.total / this.stack_size)
     }
 
     get remainder() {
+        if (this.stack_size === null )
+            return null
+
         return this.total - Math.trunc(this.total / this.stack_size) * this.stack_size
     }
 

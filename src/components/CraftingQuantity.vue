@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="readonly" v-b-tooltip.hover.left.html title="Stacks : Remainder : Total">
+        <div v-if="readonly" v-b-tooltip.hover.left :title="originalQuantity.stacks >= 1 ? 'Stacks : Remainder : Total' : 'Total'">
             <span v-if="originalQuantity.stacks >= 1">{{ quantity.stacks }}<ItemsVisualization
                     :quantity="stackQuantityForVisualization" :total="stackQuantityForVisualization" quantityKey="stacks">
             </ItemsVisualization>{{ quantity.remainder }}<ItemsVisualization
@@ -87,7 +87,6 @@
                 return value
             },
             remainderFormatter(value) {
-                console.log(`this.originalQuantity.remainder = ${this.originalQuantity.remainder}, this.quantity.remainder = ${this.quantity.remainder}, this.currentQuantity.remainder = ${this.currentQuantity.remainder}`)
                 if (this.originalQuantity.stacks === this.currentQuantity.stacks && value > this.originalQuantity.remainder)
                     return this.originalQuantity.remainder
                 return value

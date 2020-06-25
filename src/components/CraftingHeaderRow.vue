@@ -1,9 +1,9 @@
 <template>
-    <thead class="thead-light">
-        <tr>
-            <th colspan="11">{{ value }}</th>
-        </tr>
-    </thead>
+    <b-thead>
+        <b-tr variant="secondary">
+            <b-th colspan="99">{{ value }}</b-th>
+        </b-tr>
+    </b-thead>
 </template>
 
 <script>

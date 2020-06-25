@@ -33,3 +33,7 @@ export class CraftingCost {
         return `${this.gold}g, ${this.silver}s, ${this.copper}c`
     }
 }
+
+export function getWikiLink(page) {
+    return `https://villagersandheroes.gamepedia.com/${encodeURI(page.replace(' ', '_'))}`
+}

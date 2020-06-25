@@ -30,7 +30,7 @@
                             :fields="craftingListFields"
                             primary-key="id">
                         <template v-slot:cell(quantity)="data">
-                            <div class="text-center">{{ data.value }}</div>
+                            <div class="text-center">{{ data.value.total || data.value }}</div>
                         </template>
                         <template v-slot:table-caption>{{ craftingList.count }} recipes found.</template>
                     </b-table>
