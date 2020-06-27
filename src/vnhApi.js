@@ -1,5 +1,91 @@
 import Vue from 'vue'
 
+import { Category } from '@/models/category'
+import { SALVAGE_KIT_NAME, Item } from '@/models/item'
+import { Recipe } from '@/models/recipe'
+import { Type } from '@/models/type'
+
+export let SALVAGE_KIT = null
+
+export function getCategory(name) {
+    return Vue.prototype.axiosVnhApi.get(`categories/${name}`)
+        .then(response => {
+            return Category.fromJson(response.data)
+        })
+        .catch(() => {
+            return null
+        })
+}
+
+export function getItem(name) {
+    return Vue.prototype.axiosVnhApi.get(`items/${name}`)
+        .then(response => {
+            return Item.fromJson(response.data)
+        })
+        .catch(() => {
+            return null
+        })
+}
+
+export function getRecipe(name) {
+    return Vue.prototype.axiosVnhApi.get(`recipes/${name}`)
+        .then(response => {
+            return Recipe.fromJson(response.data)
+        })
+        .catch(() => {
+            return null
+        })
+}
+
+export function getRecipes(ctx) {
+    let params = `?page=${ctx.currentPage}&perPage=${ctx.perPage}`
+    if (ctx.sortBy)
+        params = `${params}&sortBy=${ctx.sortBy}&sortOrder=${ctx.sortDesc ? 'desc' : 'asc'}`
+
+    const promise = Vue.prototype.axiosVnhApi.post(`recipes/${params}`, {
+        filter: ctx.filter
+    })
+
+    return promise.then(response => {
+        let recipes = []
+        for (let index in response.data.recipes)
+            recipes.push(Recipe.fromJson(response.data.recipes[index]))
+        return {recipes: recipes, count: response.data.count}
+    }).catch(() => {
+        return []
+    })
+}
+
+export function getSkills(name) {
+    return Vue.prototype.axiosVnhApi.get(`skills/${name}`)
+        .then(response => {
+            let skills = []
+
+            if (!response.data.types)
+                return []
+
+            for (let index in response.data.types) {
+                skills.push(Type.fromJson(response.data.types[index]))
+            }
+
+            return skills
+        })
+        .catch(() => {
+            return []
+        })
+}
+
+function isAlive() {
+    return Vue.prototype.axiosVnhApi.get('/')
+        .then(() => {
+            console.log('API is alive.')
+            return []
+        })
+        .catch(() => {
+            return []
+        })
+}
+
 export function initializeApi() {
     // Configure an axios instance for the Villagers & Heroes API with it's URL and authorization pre-configured
     const axios = require('axios')
@@ -11,32 +97,10 @@ export function initializeApi() {
     })
 
     // Wake up the API in Heroku on loading the GUI if it's not awake, otherwise a significant delay occurs
-    Vue.prototype.axiosVnhApi.get('/')
-        .then(() => {
-            console.log('API is alive.')
-            return []
-        })
-        .catch(() => {
-            return []
-        })
-}
+    isAlive()
 
-export function getItem(name) {
-    return Vue.prototype.axiosVnhApi.get(`items/${name}`)
-        .then(response => {
-            return response.data
-        })
-        .catch(() => {
-            return null
-        })
-}
-
-export function getRecipe(name) {
-    return Vue.prototype.axiosVnhApi.get(`recipes/${name}`)
-        .then(response => {
-            return response.data
-        })
-        .catch(() => {
-            return null
-        })
+    // Retrieve the Salvage Kit item
+    getItem(SALVAGE_KIT_NAME).then(data => {
+        SALVAGE_KIT = data
+    })
 }

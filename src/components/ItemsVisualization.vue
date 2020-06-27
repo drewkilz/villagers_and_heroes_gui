@@ -19,17 +19,17 @@
 </template>
 
 <script>
-    import {Quantity} from "@/crafting";
+    import { CraftingQuantity } from '@/crafting/quantity'
 
     export default {
-        name: "ItemsVisualization",
+        name: 'ItemsVisualization',
         props: {
             quantity: {
-                type: Quantity,
+                type: CraftingQuantity,
                 required: true
             },
             total: {
-                type: Quantity,
+                type: CraftingQuantity,
                 required: true
             },
             quantityKey: {
@@ -51,7 +51,7 @@
                 // TODO: There is a bug in the visualization when displaying remainders - not sure the best way to
                 //  display remainder filling as it can fluctuate based on the user incrementing/decrementing/setting
                 //  the value in obtained for the needed visualization, but remains set for the total visualization -
-                //  maybe for the total, always use out of stack_size unless on final stack? While on the needed
+                //  maybe for the total, always use out of stackSize unless on final stack? While on the needed
                 //  visualization, ??? - same thing? Might make the most sense as it will then end correctly when you
                 //  have the full amount
                 if (this.quantityKey === 'remainder') {
@@ -61,7 +61,7 @@
                         return this.quantity[this.quantityKey] / this.total[this.quantityKey]
                     }
                     else
-                        return this.quantity[this.quantityKey] / this.total.stack_size
+                        return this.quantity[this.quantityKey] / this.total.stackSize
                 }
 
                 return this.quantity[this.quantityKey] / this.total[this.quantityKey]
@@ -69,7 +69,7 @@
         },
         methods: {
             getIcon(filledPercentage) {
-                return this.percentage >= filledPercentage ? "circle-fill" : "circle"
+                return this.percentage >= filledPercentage ? 'circle-fill' : 'circle'
             }
         },
         mounted() {

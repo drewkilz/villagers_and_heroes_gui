@@ -34,34 +34,30 @@
                 </b-tr>
             </b-thead>
             <CraftingHeaderRow :value='"Items"'></CraftingHeaderRow>
-            <tbody v-for="(item, key, index) in this.craftingList.items" :key="item.id">
-                <CraftingItemRow :item="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+            <tbody v-for="(item, key, index) in craftingList.items" :key="item.id">
+                <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
             </tbody>
             <CraftingHeaderRow :value='"Refined Ingredients"'></CraftingHeaderRow>
-            <tbody v-for="(item, key, index) in this.craftingList.refined" :key="item.id">
-                <CraftingItemRow :item="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+            <tbody v-for="(item, key, index) in craftingList.refined" :key="item.id">
+                <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
             </tbody>
             <CraftingHeaderRow :value='"Crafting Components"'></CraftingHeaderRow>
-            <tbody v-for="(item, key, index) in this.craftingList.components" :key="item.id">
-                <CraftingItemRow :item="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+            <tbody v-for="(item, key, index) in craftingList.components" :key="item.id">
+                <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
             </tbody>
             <CraftingHeaderRow :value='"Final Products"'></CraftingHeaderRow>
-            <tbody v-for="(item, key, index) in this.craftingList.list" :key="item.id">
-                <CraftingItemRow :item="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+            <tbody v-for="(item, key, index) in craftingList.list" :key="item.id">
+                <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
             </tbody>
-            <CraftingHeaderRow :value='getTotalCost(this.craftingList.cost)'></CraftingHeaderRow>
+            <CraftingHeaderRow :value='getTotalCost(craftingList.cost)'></CraftingHeaderRow>
         </b-table-simple>
-        <!-- TODO: Remove when done debugging -->
-        <pre v-show="false">{{ JSON.stringify(this.craftingList, null, 2) }}</pre>
     </div>
 </template>
 
 <script>
-    import CraftingHeaderRow from './CraftingHeaderRow.vue'
-    import CraftingItemRow from './CraftingItemRow.vue'
-    import { CraftingCost } from "@/utility"
-    import { CraftingList, Quantity } from '@/crafting.js'
-    import {getRecipe} from "@/vnhApi";
+    import CraftingHeaderRow from '@/components/CraftingHeaderRow'
+    import CraftingItemRow from '@/components/CraftingItemRow'
+    import { CraftingList } from '@/crafting/list'
 
     export default {
         name: 'Crafting',
@@ -77,7 +73,6 @@
         },
         data() {
             return {
-                items: [],
                 fields: [
                     {key: 'name', stickyColumn: true, label: 'Items'},
                     {key: 'needed', label: ''},
@@ -85,61 +80,78 @@
                     {key: 'total', label: ''},
                     {key: 'source', label: ''}
                 ],
-                isBusy: false
+                isBusy: false,
+                test: 100,
+                craftingObjects: [],
+                craftingQuantities: []
             }
         },
         methods: {
             switchContent(content) {
                 return this.$emit('switch-content', content)
             },
-            valueChange(item, quantity) {
-                let object = this.craftingList.find(item.name)
+            valueChange(object, difference, child = false) {
+                if (child) {
+                    // Child recipe/item of a user operation, so reduce/increment the total quantity
+                    if (object.quantity.total + difference < 0) {
+                        // Don't go below zero
+                        object.quantity.total = 0
+                    }
+                    else
+                        object.quantity.total += difference
 
-                console.log(`object=${JSON.stringify(object)}`)
+                    // Reduce/Increment the needed quantity
+                    if (object.neededQuantity.total + difference < 0) {
+                        // Don't go below zero
+                        object.neededQuantity.total = 0
+                    }
+                    else {
+                        object.neededQuantity.total += difference
+                    }
 
-                object.neededQuantity.total = item.quantity.total - quantity.total
+                    if (object.quantity.total < object.obtainedQuantity.total) {
+                        // Match the current quantity to total quantity in the case where, for example, 30 of an item
+                        //  was gathered, but then a refined ingredient was made and only 28 are now needed
+                        object.obtainedQuantity.total = object.quantity.total
+                        object.neededQuantity.total = 0
+                    }
+                }
+                else {
+                    // Reduce/Increment the needed quantity
+                    object.neededQuantity.total += difference
+                }
 
-                for (let key in item.ingredients) {
-                    let ingredient = item.ingredients[key]
-                    console.log(`ingredient=${JSON.stringify(ingredient)}`)
-                    // name, quantity
-                    this.valueChange(ingredient.item, new Quantity(ingredient.quantity))
+                for (let key in object.object.ingredients) {
+                    let ingredient = object.object.ingredients[key]
+                    let ingredientRowObject = this.craftingList.all[ingredient.item.name]
+                    this.valueChange(ingredientRowObject, difference * ingredient.quantity, true)
                 }
             },
             getTotalCost(cost) {
-                return `Cost: ${new CraftingCost(cost).toString()}`
-            },
-            onLoad() {
-                this.isBusy = true
-
-                this.items = []
-
-                getRecipe("Oread's Axe").then(recipe => {
-                    this.craftingList.reset()
-                    this.craftingList.add(recipe, 5)
-                    this.craftingList.calculate().then(() => {
-                        let locals = ['items', 'refined', 'components', 'list']
-                        for (let index in locals) {
-                            let listName = locals[index]
-                            for (let key in this.craftingList[listName]) {
-                                let object = this.craftingList[listName][key]
-                                object.neededQuantity = object.quantity.clone()
-                                object.obtainedQuantity = new Quantity(0, object.quantity.stack_size ?
-                                    object.quantity.stack_size :
-                                    object.item.stack_size)
-
-                                this.items.push(object)
-                            }
-                        }
-
-                        this.isBusy = false
-                    })
-                })
+                return `Cost: ${cost}`
             }
         },
         created() {
-            console.log('test')
-            this.onLoad()
+            this.isBusy = true
+
+            this.craftingObjects = []
+            this.craftingQuantities = []
+
+            this.craftingList.calculate().then(() => {
+                for (let key in this.craftingList.all) {
+                    let object = this.craftingList.all[key]
+
+                    // As the objects and quantities are created post-initialization of this Vue component, they
+                    //  do not have reactive getters and setters - by storing their references in a local list, the
+                    //  reactive functions are added
+                    this.craftingObjects.push(object)
+                    this.craftingQuantities.push(object.quantity)
+                    this.craftingQuantities.push(object.neededQuantity)
+                    this.craftingQuantities.push(object.obtainedQuantity)
+                }
+
+                this.isBusy = false
+            })
         }
     }
 </script>

@@ -1,11 +1,9 @@
 import Vue from 'vue'
-import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import App from './App.vue'
-import {initializeApi} from "@/vnhApi";
-import {initializeFilters} from "@/filters";
+import { initializeApi } from '@/vnhApi'
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
@@ -15,7 +13,8 @@ Vue.use(IconsPlugin)
 Vue.config.productionTip = true
 
 initializeApi()
-initializeFilters()
+
+import App from '@/App'
 
 new Vue({
     render: h => h(App),

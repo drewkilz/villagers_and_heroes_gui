@@ -17,14 +17,14 @@
 </template>
 
 <script>
-    import Crafting from './components/Crafting.vue'
-    import Credits from './components/Credits.vue'
-    import Footer from './components/Footer.vue'
-    import Home from './components/Home.vue'
-    import NavBar from './components/NavBar.vue'
-    import NotFound from './components/NotFound.vue'
-    import Recipes from './components/Recipes.vue'
-    import  { CraftingList } from './crafting.js'
+    import Crafting from '@/components/Crafting'
+    import Credits from '@/components/Credits'
+    import Footer from '@/components/Footer'
+    import Home from '@/components/Home'
+    import NavBar from '@/components/NavBar'
+    import NotFound from '@/components/NotFound'
+    import Recipes from '@/components/Recipes'
+    import { CraftingList } from '@/crafting/list'
 
     export default {
         name: 'App',
@@ -39,6 +39,7 @@
         },
         data() {
             return {
+                type: null,
                 title: process.env.VUE_APP_TITLE,
                 currentContentComponent: 'Home',
                 currentContentTitle: 'Home',
@@ -67,14 +68,16 @@
                     this.contentComponents[componentKey]['title'] :
                     this.contentComponents[componentKey]['component']
             },
-            addToCraftingList(recipe, quantity) {
-                this.craftingList.add(recipe, quantity)
+            addToCraftingList(object) {
+                this.craftingList.add(object.object, object.quantity || 1)
                 this.$refs.navBar.updateCraftingListCount()
             },
             clearCraftingList() {
                 this.craftingList.reset(true)
                 this.$refs.navBar.updateCraftingListCount()
             }
+        },
+        mounted() {
         }
     }
 </script>

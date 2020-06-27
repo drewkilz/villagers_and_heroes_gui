@@ -78,29 +78,29 @@
             </template>
             <template v-slot:cell(name)="row">
                 <b-link :id="getRowItemId(row.index, 'name-link')"
-                        :href="getWikiLink(row.item.item.name)"
+                        :href="getWikiLink(row.item.object.name)"
                         target="_blank"
                         rel="noopener">
-                    {{ row.item.name }}
+                    {{ row.item.object.name }}
                 </b-link>
                 <b-popover
                         :target="getRowItemId(row.index, 'name-link')"
                         placement="bottomright"
                         triggers="hover focus">
-                    <template v-slot:title>{{ row.item.name }}</template>
+                    <template v-slot:title>{{ row.item.object.name }}</template>
                     <ul>
-                        <li v-for="ingredient in row.item.ingredients" :key="ingredient.id">
+                        <li v-for="ingredient in row.item.object.ingredients" :key="ingredient.id">
                             {{ ingredient.quantity }}
                             {{ ingredient.item.name }}
                         </li>
-                        <li v-if="row.item.cost > 0">{{row.item.cost | craftingCostFilter }}</li>
+                        <li v-if="row.item.object.cost.total > 0">{{row.item.object.cost }}</li>
                     </ul>
                 </b-popover>
             </template>
             <template v-slot:cell(add)="row">
                 <b-input-group size="sm">
                     <b-form-input v-model="row.item.quantity" size="sm" style="width: 42px" :debounce="debounce" type="number" placeholder="qty" number min="1" step="1"></b-form-input>
-                    <b-button size="sm" @click="addToList(row)" v-b-tooltip:hover title="Add to Crafting List"><b-icon-cart-plus></b-icon-cart-plus></b-button>
+                    <b-button size="sm" @click="addToList(row.item)"><b-icon-cart-plus></b-icon-cart-plus></b-button>
                 </b-input-group>
             </template>
             <template v-slot:table-caption>{{ totalRows }} recipes found.</template>
@@ -118,15 +118,18 @@
 </template>
 
 <script>
-    import { compareValues, getWikiLink } from '../utility.js'
+    import { CraftingObject } from '@/crafting/object'
+    import { compareValues, getWikiLink } from '@/utility'
+    import { getCategory, getRecipes, getSkills } from '@/vnhApi'
 
     export default {
         name: 'Recipes',
         data() {
             return {
+                debounce: 200,
                 fields: [
                     {key: 'name', sortable: true, stickyColumn: true},
-                    {key: 'level', sortable: true},
+                    {key: 'level', sortable: true, formatter: 'getLevel'},
                     {key: 'class', sortable: true, formatter: 'getClassName'},
                     {key: 'subclass', sortable: true, formatter: 'getSubClassName', label:'Sub-Class'},
                     {key: 'skill', sortable: true, formatter: 'getEnumValue'},
@@ -134,10 +137,13 @@
                     {key: 'add', label: ''}
                 ],
                 isBusy: false,
+
                 totalRows: 1,
                 currentPage: 1,
                 perPage: 10,
+
                 filter: [],
+
                 nameFilter: '',
                 minLevelFilter: '',
                 maxLevelFilter: '',
@@ -145,78 +151,14 @@
                 subclassFilter: [],
                 skillFilter: [],
                 typeFilter: [],
+
                 classOptions: [],
                 subclassOptions: [],
                 skillOptions: [],
-                typeOptions: [],
-                debounce: 200
+                typeOptions: []
             }
         },
         methods: {
-            getRowItemId(index, name) {
-                return `recipes-${name}-${index}`
-            },
-            getEnumValue(value) {
-                return `${value.name}`
-            },
-            getClassName(value, key, item) {
-                return item.item.class_.name
-            },
-            getSubClassName(value, key, item) {
-                return item.item.subclass.name
-            },
-            recipeProvider(ctx) {
-                let params = `?page=${ctx.currentPage}&perPage=${ctx.perPage}`
-                if (ctx.sortBy)
-                    params = `${params}&sortBy=${ctx.sortBy}&sortOrder=${ctx.sortDesc ? 'desc' : 'asc'}`
-
-                const promise = this.axiosVnhApi.post(`recipes/${params}`, {
-                    filter: ctx.filter
-                })
-
-                return promise.then(response => {
-                    this.totalRows = response.data.count
-                    return response.data.recipes || []
-                }).catch(() => {
-                    return []
-                })
-            },
-            getCategoryOptions(categoryName, skillType) {
-                let url = `categories/${categoryName}`
-                if (skillType)
-                    url = `skills/${skillType}`
-
-                return this.axiosVnhApi.get(url)
-                    .then(response => {
-                        let options = []
-
-                        if (!response.data.types)
-                            return []
-
-                        for (let index in response.data.types) {
-                            let type = response.data.types[index]
-                            options.push({text: type.name, value: type.id})
-                        }
-
-                        options.sort(compareValues('text'))
-
-                        return options
-                    })
-                .catch(() => {
-                    return []
-                })
-            },
-            removeFilter(filter, field, op) {
-                for (let index = filter.length; index--;)
-                    if (filter[index]['field'] === field) {
-                        if (op) {
-                            if (filter[index]['op'] === op)
-                                filter.splice(index, 1)
-                        }
-                        else
-                            filter.splice(index, 1)
-                    }
-            },
             addFilter(field, op, value, includeOp) {
                 // Set up a local filter_ based off of the component's filter
                 let filter_ = []
@@ -234,6 +176,21 @@
 
                 // Set the component's filter to the local filter to trigger a filtering event
                 this.filter = filter_
+            },
+            addToList(object) {
+                this.$emit('add-to-crafting-list', object.clone())
+
+                this.$bvToast.toast(
+                    `Added ${object.quantity ? object.quantity : 1} ${object.object.name} to crafting list.`, {
+                    toaster: 'b-toaster-bottom-center',
+                    appendToast: true,
+                    variant: 'success',
+                    autoHideDelay: 2000,
+                    noCloseButton: true
+                })
+
+                // Clear out the quantity entered from the UI
+                object.quantity = ''
             },
             changeFilter(newVal, field, op, includeOp) {
                 let addFilter = false
@@ -259,31 +216,68 @@
                 this.skillFilter = []
                 this.typeFilter = []
             },
-            addToList(row) {
-                let recipe = JSON.parse(JSON.stringify(row.item))
+            getClassName(value, key, item) {
+                return item.object.item.class.name
+            },
+            getEnumValue(value, key, item) {
+                return `${item.object[key].name}`
+            },
+            getLevel(value, key, item) {
+                return item.object.level
+            },
+            getOptions(type, name) {
+                let function_ = type === 'Category' ? getCategory : getSkills
 
-                this.$emit('add-to-crafting-list', recipe, recipe.quantity || 1)
+                let options = []
 
-                this.$bvToast.toast(`Added ${recipe.quantity} ${recipe.name} to crafting list.`, {
-                    toaster: 'b-toaster-bottom-center',
-                    appendToast: true,
-                    variant: 'success',
-                    autoHideDelay: 2000,
-                    noCloseButton: true
+                return function_(name).then(data => {
+                    let types = type === 'Category' ? data.types : data
+                    for (let index in types) {
+                        let type = types[index]
+                        options.push({text: type.name, value: type.id})
+                    }
+
+                    options.sort(compareValues('text'))
+
+                    return options
                 })
-
-                // Clear out the quantity entered from the UI
-                row.item.quantity = ''
+            },
+            getRowItemId(index, name) {
+                return `recipes-${name}-${index}`
+            },
+            getSubClassName(value, key, item) {
+                return item.object.item.subclass.name
             },
             getWikiLink(page) {
                 return getWikiLink(page)
+            },
+            recipeProvider(ctx) {
+                return getRecipes(ctx).then(data => {
+                    this.totalRows = data.count
+                    let objects = []
+                    for (let index in data.recipes) {
+                        objects.push(new CraftingObject(data.recipes[index], ''))
+                    }
+                    return objects
+                })
+            },
+            removeFilter(filter, field, op) {
+                for (let index = filter.length; index--;)
+                    if (filter[index]['field'] === field) {
+                        if (op) {
+                            if (filter[index]['op'] === op)
+                                filter.splice(index, 1)
+                        }
+                        else
+                            filter.splice(index, 1)
+                    }
             }
         },
         mounted() {
-            this.getCategoryOptions('Class').then(data => {this.classOptions = data})
-            this.getCategoryOptions('Sub Class').then(data => {this.subclassOptions = data})
-            this.getCategoryOptions('Skill', 'Crafting').then(data => {this.skillOptions = data})
-            this.getCategoryOptions('Crafting Type').then(data => {this.typeOptions = data})
+            this.getOptions('Category', 'Class').then(data => {this.classOptions = data})
+            this.getOptions('Category', 'Sub Class').then(data => {this.subclassOptions = data})
+            this.getOptions('Skill', 'Crafting').then(data => {this.skillOptions = data})
+            this.getOptions('Category', 'Crafting Type').then(data => {this.typeOptions = data})
         },
         watch: {
             nameFilter(newVal) {

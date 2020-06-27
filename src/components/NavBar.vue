@@ -28,9 +28,23 @@
                             head-variant="dark"
                             :items="craftingListItems"
                             :fields="craftingListFields"
-                            primary-key="id">
+                            primary-key="id"
+                            show-empty>
+                        <template v-slot:empty>
+                            <p>No recipes selected.</p>
+                            <p>
+                                You can select the recipes and quantities to craft in either the
+                                <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or
+                                <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
+                            </p>
+                        </template>
+                        <template v-slot:cell(name)="data">
+                            {{ data.item.object.name }}
+                        </template>
                         <template v-slot:cell(quantity)="data">
-                            <div class="text-center">{{ data.value.total || data.value }}</div>
+                            <div class="text-center">
+                                {{ getQuantity(data.item) }}
+                            </div>
                         </template>
                         <template v-slot:table-caption>{{ craftingList.count }} recipes found.</template>
                     </b-table>
@@ -47,8 +61,9 @@
 </template>
 
 <script>
-    import { compareValues } from "@/utility"
-    import { CraftingList } from "@/crafting"
+    import { compareValues } from '@/utility'
+    import { CraftingList } from '@/crafting/list'
+    import { CraftingQuantity } from '@/crafting/quantity'
 
     export default {
         name: 'NavBar',
@@ -72,11 +87,8 @@
             }
         },
         methods: {
-            switchContent(content) {
-                return this.$emit('switch-content', content)
-            },
             clearCraftingList() {
-                this.$emit('clear-crafting-list',)
+                this.$emit('clear-crafting-list')
             },
             craftingListItems() {
                 let items = []
@@ -85,9 +97,15 @@
                     items.push(this.craftingList.list[key])
                 }
 
-                items.sort(compareValues('name'))
+                items.sort(compareValues('object.name'))
 
                 return items
+            },
+            getQuantity(object) {
+                return object.quantity instanceof CraftingQuantity ? object.quantity.total : object.quantity
+            },
+            switchContent(content) {
+                return this.$emit('switch-content', content)
             },
             updateCraftingListCount() {
                 this.craftingListCount = this.craftingList.count

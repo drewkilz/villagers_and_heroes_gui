@@ -1,51 +1,53 @@
 <template>
     <b-tr :class="index % 2 ? 'alternate-row' : ''">
         <b-td>
-            <b-link :id="getRowItemId(item, 'name-link')"
-                    :href="getWikiLink(item.name)"
+            <b-link :id="getRowItemId(object, 'name-link')"
+                    :href="getWikiLink(object.object.name)"
                     target="_blank"
                     rel="noopener">
-                {{ item.name }}
+                {{ object.object.name }}
             </b-link>
             <b-popover
-                    :target="getRowItemId(item, 'name-link')"
+                    :target="getRowItemId(object, 'name-link')"
                     placement="bottomright"
                     triggers="hover focus"
-                    v-if="item.ingredients || item.cost">
-                <template v-slot:title>{{ item.name }}</template>
+                    v-if="isRecipeOrHasCost(object.object)">
+                <template v-slot:title>{{ object.object.name }}</template>
                 <ul>
-                    <li v-for="ingredient in item.ingredients" :key="ingredient.id">
+                    <li v-for="ingredient in object.object.ingredients" :key="ingredient.id">
                         {{ ingredient.quantity }}
                         {{ ingredient.item.name }}
                     </li>
-                    <li v-if="item.cost > 0">{{item.cost | craftingCostFilter }}</li>
+                    <li v-if="object.object.cost && object.object.cost.total > 0">{{ object.object.cost }}</li>
                 </ul>
             </b-popover>
         </b-td>
         <b-td>
-            <CraftingQuantity :item="item" :quantity="item.neededQuantity" :currentQuantity="item.obtainedQuantity" readonly></CraftingQuantity>
+            <CraftingQuantity :object="object" type="needed" readonly></CraftingQuantity>
         </b-td>
         <b-td>
-            <CraftingQuantity :item="item" :quantity="item.quantity" :currentQuantity="item.obtainedQuantity" complete @value-change="valueChange"></CraftingQuantity>
+            <CraftingQuantity :object="object" type="obtained" complete @value-change="valueChange"></CraftingQuantity>
         </b-td>
         <b-td>
-            <CraftingQuantity :item="item" :quantity="item.quantity" :currentQuantity="item.obtainedQuantity" readonly></CraftingQuantity>
+            <CraftingQuantity :object="object" type="total" readonly></CraftingQuantity>
         </b-td>
         <b-td>
-            {{ getSource(item) }}
+            {{ getSource(object.object) }}
         </b-td>
     </b-tr>
 </template>
 
 <script>
-    import CraftingQuantity from "@/components/CraftingQuantity.vue"
-    import { getWikiLink} from "@/utility.js"
+    import CraftingQuantity from '@/components/CraftingQuantity'
+    import { getWikiLink } from '@/utility'
+    import { CraftingObject } from '@/crafting/object'
+    import { Recipe } from '@/models/recipe'
 
     export default {
         name: 'CraftingItemRow',
         props: {
-            item: {
-                type: Object,
+            object: {
+                type: CraftingObject,
                 required: true
             },
             index: {
@@ -57,37 +59,40 @@
             CraftingQuantity
         },
         methods: {
-            valueChange(item, quantity) {
-                return this.$emit('value-change', item, quantity)
-            },
-            getSource(item) {
-                if (item.type.name === 'Plant') {
-                    return `Plant Lore (${item.level}-${item.level+14})`
+            getSource(object) {
+                if (object instanceof Recipe)
+                    return `${object.skill.name} (${object.level})`
+
+                if (object.type.name === 'Plant') {
+                    return `Plant Lore (${object.level}-${object.level+14})`
                 }
-                else if (item.type.name === 'Bug') {
-                    return `Bug Lore (${item.level}-${item.level+14})`
+                else if (object.type.name === 'Bug') {
+                    return `Bug Lore (${object.level}-${object.level+14})`
                 }
-                else if (item.type.name === 'Mineral') {
-                    return `Mining (${item.level}-${item.level+14})`
+                else if (object.type.name === 'Mineral') {
+                    return `Mining (${object.level}-${object.level+14})`
                 }
-                else if (item.type.name === 'Fish') {
-                    return `Fishing (${item.level}-${item.level+14})`
+                else if (object.type.name === 'Fish') {
+                    return `Fishing (${object.level}-${object.level+14})`
                 }
-                else if (item.skill) {
-                    return `${item.skill.name} (${item.level})`
-                }
-                else if (item.name.indexOf('Pelt') !== -1) {
+                else if (object.name.indexOf('Pelt') !== -1) {
                     // TODO : Level mapping for boars
-                    return `Ranching: Boars (?), Beasts (${item.level}-${item.level+14})`
+                    return `Ranching: Boars (?), Beasts (${object.level}-${object.level+14})`
                 }
                 // TODO: Finish source mapping
-                return JSON.stringify(item)
+                return JSON.stringify(object)
             },
-            getRowItemId(item, name) {
-                return `crafting-${name}-${item.id}`
+            getRowItemId(object, name) {
+                return `crafting-${name}-${object.object.id}`
             },
             getWikiLink(page) {
                 return getWikiLink(page)
+            },
+            isRecipeOrHasCost(object) {
+                return object instanceof Recipe || (object.cost && object.cost.total)
+            },
+            valueChange(object, quantity) {
+                return this.$emit('value-change', object, quantity)
             }
         }
     }
