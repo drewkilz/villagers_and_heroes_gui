@@ -7,6 +7,9 @@
                     rel="noopener">
                 {{ object.object.name }}
             </b-link>
+            <template v-if="isSalvageKit(object.object)">
+                <span v-b-tooltip.hover title="The number of items displayed for Salvage Kits is the number of charges needed, not the number of kits.">***</span>
+            </template>
             <b-popover
                     :target="getRowItemId(object, 'name-link')"
                     placement="bottomright"
@@ -32,7 +35,12 @@
             <CraftingQuantity :object="object" type="total" readonly></CraftingQuantity>
         </b-td>
         <b-td>
-            {{ getSource(object.object) }}
+            <template v-if="source.link">
+                <b-link :href="source.link" target="_blank" rel="noopener">{{ source.text }}</b-link>
+            </template>
+            <template v-else>
+                {{ source.text }}
+            </template>
         </b-td>
     </b-tr>
 </template>
@@ -42,6 +50,7 @@
     import { getWikiLink } from '@/utility'
     import { CraftingObject } from '@/crafting/object'
     import { Recipe } from '@/models/recipe'
+    import {SALVAGE_KIT} from "@/vnhApi";
 
     export default {
         name: 'CraftingItemRow',
@@ -58,27 +67,40 @@
         components: {
             CraftingQuantity
         },
+        data() {
+            return {
+                source: this.getSource(this.object.object)
+            }
+        },
         methods: {
             getSource(object) {
-                if (object instanceof Recipe)
-                    return `${object.skill.name} (${object.level})`
+                let source = {
+                    link: null,
+                    text: null
+                }
 
-                if (object.type.name === 'Plant') {
-                    return `Plant Lore (${object.level}-${object.level+14})`
+                if (object.name === SALVAGE_KIT.name) {
+                    source.link = this.getWikiLink('Littia Remus')
+                    source.text = 'Littia Remus (Ardent City:D3)'
                 }
-                else if (object.type.name === 'Bug') {
-                    return `Bug Lore (${object.level}-${object.level+14})`
-                }
-                else if (object.type.name === 'Mineral') {
-                    return `Mining (${object.level}-${object.level+14})`
-                }
-                else if (object.type.name === 'Fish') {
-                    return `Fishing (${object.level}-${object.level+14})`
-                }
+                else if (object instanceof Recipe)
+                    source.text = `${object.skill.name} (${object.level})`
+                else if (object.type.name === 'Plant')
+                    source.text = `Plant Lore (${object.level}-${object.level+14})`
+                else if (object.type.name === 'Bug')
+                    source.text = `Bug Lore (${object.level}-${object.level+14})`
+                else if (object.type.name === 'Mineral')
+                    source.text = `Mining (${object.level}-${object.level+14})`
+                else if (object.type.name === 'Fish')
+                    source.text = `Fishing (${object.level}-${object.level+14})`
                 else if (object.name.indexOf('Pelt') !== -1) {
                     // TODO : Level mapping for boars
-                    return `Ranching: Boars (?), Beasts (${object.level}-${object.level+14})`
+                    source.text = `Ranching: Boars (?), Beasts (${object.level}-${object.level+14})`
                 }
+
+                if (source.text)
+                    return source
+
                 // TODO: Finish source mapping
                 return JSON.stringify(object)
             },
@@ -91,10 +113,13 @@
             isRecipeOrHasCost(object) {
                 return object instanceof Recipe || (object.cost && object.cost.total)
             },
+            isSalvageKit(object) {
+                return object.name === SALVAGE_KIT.name
+            },
             valueChange(object, quantity) {
                 return this.$emit('value-change', object, quantity)
             }
-        }
+        },
     }
 </script>
 
