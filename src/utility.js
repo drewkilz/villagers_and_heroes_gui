@@ -5,13 +5,13 @@ export function compareValues(key, order = 'asc') {
     return (a, b) => {
         let evalExpression = ''
         for (let index in keys) {
-            evalExpression += `[${keys[index]}]`
+            evalExpression += `['${keys[index]}']`
         }
         let aValue = null
         let bValue = null
         try {
-            let aValue = eval(`a${evalExpression}`)
-            let bValue = eval(`b${evalExpression}`)
+            aValue = eval(`a${evalExpression}`)
+            bValue = eval(`b${evalExpression}`)
             if (!aValue || !bValue) {
                 // Keys don't exist on one or both of the objects so can't compare (or they are both nothing)
                 return 0
