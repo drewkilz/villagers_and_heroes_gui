@@ -114,6 +114,12 @@ export class CraftingList {
     reset(list = false) {
         if (list)
             this.list = {}
+        else
+            for (let key in this.list) {
+                let object = this.list[key]
+                // Reset the list items so that obtained quantities are set back to zero
+                this.list[key] = object.clone()
+            }
         this.all = {}
         this.components = {}
         this.items = {}
