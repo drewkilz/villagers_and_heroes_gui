@@ -22,9 +22,13 @@ export class CraftingList {
             if (!(SALVAGE_KIT.name in this.items)) {
                 this.items[SALVAGE_KIT.name] = new CraftingObject(
                     SALVAGE_KIT.clone(), new CraftingQuantity(0, SALVAGE_KIT.stackSize))
+
+                if (!(SALVAGE_KIT.name in this.all)) {
+                    // Add the salvage kit to the dictionary of all items / recipes for quick lookup
+                    this.all[SALVAGE_KIT.name] = this.items[SALVAGE_KIT.name]
+                }
             }
 
-            // TODO: Salvage kit is not reactive
             this.items[SALVAGE_KIT.name].quantity.total += quantity.total
             this.items[SALVAGE_KIT.name].neededQuantity.total += quantity.total
         }
