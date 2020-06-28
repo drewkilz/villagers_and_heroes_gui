@@ -9,16 +9,15 @@
             </p>
         </div>
         <!-- TODO: Implement a crafting list view where you can review and add/remove/update quantities before finalizing the crafting list -->
-        <!-- TODO: Add in an options panel for salvaging, percentages, etc. -->
         <div v-else style="border: thin solid; margin-bottom: 5px; padding: 5px">
             <div class="font-weight-bold">
                 Options
-                <b-link size="sm" @click="showHideOptions" style="width: 100px; height: 20px">
-                    <b-icon-chevron-double-up v-if="showOptions" scale="0.75"></b-icon-chevron-double-up>
+                <b-link size="sm" @click="showHide('options')">
+                    <b-icon-chevron-double-up v-if="show['options']" scale="0.75"></b-icon-chevron-double-up>
                     <b-icon-chevron-double-down v-else scale="0.75"></b-icon-chevron-double-down>
                 </b-link>
             </div>
-            <b-form v-show="showOptions">
+            <b-form v-show="show['options']">
                 <b-row class="text-left">
                     <b-col md="auto">
                         <b-form-checkbox
@@ -94,20 +93,20 @@
                         <b-th>Source</b-th>
                     </b-tr>
                 </b-thead>
-                <CraftingHeaderRow :value='"Items"'></CraftingHeaderRow>
-                <tbody v-for="(item, key, index) in craftingList.items" :key="item.id">
+                <CraftingHeaderRow :value='"Items"' name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
+                <tbody v-show="show['items']" v-for="(item, key, index) in craftingList.items" :key="item.id">
                     <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                 </tbody>
-                <CraftingHeaderRow :value='"Refined Ingredients"'></CraftingHeaderRow>
-                <tbody v-for="(item, key, index) in craftingList.refined" :key="item.id">
+                <CraftingHeaderRow :value='"Refined Ingredients"' name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
+                <tbody v-show="show['refined']" v-for="(item, key, index) in craftingList.refined" :key="item.id">
                     <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                 </tbody>
-                <CraftingHeaderRow :value='"Crafting Components"'></CraftingHeaderRow>
-                <tbody v-for="(item, key, index) in craftingList.components" :key="item.id">
+                <CraftingHeaderRow :value='"Crafting Components"' name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
+                <tbody v-show="show['components']" v-for="(item, key, index) in craftingList.components" :key="item.id">
                     <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                 </tbody>
-                <CraftingHeaderRow :value='"Final Products"'></CraftingHeaderRow>
-                <tbody v-for="(item, key, index) in craftingList.list" :key="item.id">
+                <CraftingHeaderRow :value='"Final Products"' name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
+                <tbody v-show="show['final']" v-for="(item, key, index) in craftingList.list" :key="item.id">
                     <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                 </tbody>
                 <CraftingHeaderRow :value='getTotalCost(craftingList.cost)'></CraftingHeaderRow>
@@ -146,7 +145,13 @@
                 craftingObjects: [],
                 craftingQuantities: [],
                 debounce: 200,
-                showOptions: true
+                show: {
+                    options: true,
+                    items: true,
+                    refined: true,
+                    components: true,
+                    final: true
+                }
             }
         },
         methods: {
@@ -175,8 +180,8 @@
             getTotalCost(cost) {
                 return `Cost: ${cost}`
             },
-            showHideOptions() {
-                this.showOptions = !this.showOptions
+            showHide(name) {
+                this.show[name] = !this.show[name]
             },
             switchContent(content) {
                 return this.$emit('switch-content', content)
