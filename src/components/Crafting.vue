@@ -1,6 +1,5 @@
 <template>
     <div id="crafting">
-        <!-- TODO: Bug: If you add items to the crafting list, come to crafting, navigate away, then come back, all sorts of errors occur - no idea why! -->
         <div v-if="!craftingList.count && !isBusy">
             <p>No recipes selected.</p>
             <p>

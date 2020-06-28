@@ -16,7 +16,7 @@ export class CraftingList {
     }
 
     async _calculate(recipe, quantity) {
-        let quantity_ = quantity
+        let quantity_ = quantity.total
 
         if (this.options.salvaging && recipe.item.salvageable) {
             if (!(SALVAGE_KIT.name in this.list.items)) {
@@ -49,7 +49,8 @@ export class CraftingList {
             let object = null
 
             if (subRecipe) {
-                await this._calculate(subRecipe, quantity_ * ingredient.quantity)
+                await this._calculate(subRecipe, new CraftingQuantity(
+                    quantity_ * ingredient.quantity, subRecipe.item.stackSize))
 
                 if (subRecipe.type.name === CraftingType.REFINED)
                     currentDictionary = this.refined
@@ -85,14 +86,14 @@ export class CraftingList {
             // No else required as the object will have already been updated by the currentDictionary update
         }
 
-        this.cost.total += (recipe.cost.total * quantity)
+        this.cost.total += (recipe.cost.total * quantity.total)
     }
 
     add(recipe, quantity = 1) {
         if (!(recipe.name in this.list))
-            this.list[recipe.name] = new CraftingObject(recipe, quantity)
+            this.list[recipe.name] = new CraftingObject(recipe, new CraftingQuantity(quantity, recipe.item.stackSize))
         else
-            this.list[recipe.name].quantity += quantity
+            this.list[recipe.name].quantity.total += quantity
     }
 
     async calculate() {
@@ -105,7 +106,6 @@ export class CraftingList {
 
             // Add the object to the dictionary of all objects for fast lookups with a better quantity object
             this.all[key] = object
-            object.quantity = new CraftingQuantity(object.quantity, object.object.item.stackSize)
         }
     }
 

@@ -43,7 +43,7 @@
                         </template>
                         <template v-slot:cell(quantity)="data">
                             <div class="text-center">
-                                {{ getQuantity(data.item) }}
+                                {{ data.item.quantity.total }}
                             </div>
                         </template>
                         <template v-slot:table-caption>{{ craftingList.count }} recipes found.</template>
@@ -63,7 +63,6 @@
 <script>
     import { compareValues } from '@/utility'
     import { CraftingList } from '@/crafting/list'
-    import { CraftingQuantity } from '@/crafting/quantity'
 
     export default {
         name: 'NavBar',
@@ -100,9 +99,6 @@
                 items.sort(compareValues('object.name'))
 
                 return items
-            },
-            getQuantity(object) {
-                return object.quantity instanceof CraftingQuantity ? object.quantity.total : object.quantity
             },
             switchContent(content) {
                 return this.$emit('switch-content', content)
