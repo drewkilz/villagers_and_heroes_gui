@@ -79,6 +79,7 @@ export class CraftingList {
             else {
                 // The sub recipe / item already exists, so update the quantity
                 currentDictionary[key].quantity.total += object.quantity.total
+                currentDictionary[key].neededQuantity.total += object.neededQuantity.total
             }
 
             if (!(key in this.all)) {
