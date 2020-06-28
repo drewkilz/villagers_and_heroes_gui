@@ -38,5 +38,5 @@ export function compareValues(key, order = 'asc') {
 }
 
 export function getWikiLink(page) {
-    return `https://villagersandheroes.gamepedia.com/${encodeURI(page.replace(' ', '_'))}`
+    return `https://villagersandheroes.gamepedia.com/${encodeURI(page.replace(/ /g, '_'))}`
 }

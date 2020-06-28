@@ -49,8 +49,9 @@
     import CraftingQuantity from '@/components/CraftingQuantity'
     import { getWikiLink } from '@/utility'
     import { CraftingObject } from '@/crafting/object'
+    import { SALVAGE_KIT_NAME, WATER_NAME } from '@/models/item'
+    import { ItemType, GatheringSkillType } from '@/models/type'
     import { Recipe } from '@/models/recipe'
-    import {SALVAGE_KIT} from "@/vnhApi";
 
     export default {
         name: 'CraftingItemRow',
@@ -69,43 +70,72 @@
         },
         data() {
             return {
-                source: this.getSource(this.object.object)
+                source: this.getSource(this.object.object),
+                ranchingAnimalHarvestLevelMap: {
+                    1: {min: 1, max: 9},
+                    15: {min: 10, max: 19},
+                    30: {min: 20, max: 29},
+                    45: {min: 30, max: 34},
+                    60: {min: 35, max: 39},
+                    75: {min: 40, max: 44},
+                    90: {min: 45, max: 49}
+                }
             }
         },
         methods: {
+            getRowItemId(object, name) {
+                return `crafting-${name}-${object.object.id}`
+            },
             getSource(object) {
                 let source = {
                     link: null,
                     text: null
                 }
+                if (object instanceof Recipe) {
+                    source.text = `${object.skill.name} (${object.level})`
 
-                if (object.name === SALVAGE_KIT.name) {
+                    if (object.type.name.endsWith('Leather'))
+                        source.text += `, Beasts (${this.getSourceLevelRangeText(object.level)})`
+                }
+                else if (object.name === SALVAGE_KIT_NAME) {
                     source.link = this.getWikiLink('Littia Remus')
                     source.text = 'Littia Remus (Ardent City:D3)'
                 }
-                else if (object instanceof Recipe)
-                    source.text = `${object.skill.name} (${object.level})`
-                else if (object.type.name === 'Plant')
-                    source.text = `Plant Lore (${object.level}-${object.level+14})`
-                else if (object.type.name === 'Bug')
-                    source.text = `Bug Lore (${object.level}-${object.level+14})`
-                else if (object.type.name === 'Mineral')
-                    source.text = `Mining (${object.level}-${object.level+14})`
-                else if (object.type.name === 'Fish')
-                    source.text = `Fishing (${object.level}-${object.level+14})`
-                else if (object.name.indexOf('Pelt') !== -1) {
-                    // TODO : Level mapping for boars
-                    source.text = `Ranching: Boars (?), Beasts (${object.level}-${object.level+14})`
+                else if (object.name === WATER_NAME) {
+                    source.link = this.getWikiLink('Water Well')
+                    source.text = 'Water Well'
+                }
+                else if (object.type.name === ItemType.PLANT)
+                    source.text = this.getSourceGatheringText(GatheringSkillType.PLANT_LORE, object.level)
+                else if (object.type.name === ItemType.BUG)
+                    source.text = this.getSourceGatheringText(GatheringSkillType.BUG_LORE, object.level)
+                else if (object.type.name === ItemType.MINERAL)
+                    source.text = this.getSourceGatheringText(GatheringSkillType.MINING, object.level)
+                else if (object.type.name === ItemType.FISH)
+                    source.text = this.getSourceGatheringText(GatheringSkillType.FISHING, object.level)
+                else if (object.name.endsWith('Pelt')) {
+                    source.text = `Ranching: Boars (${this.getSourceLevelRangeRanchingText(object.level)}), Beasts (${this.getSourceLevelRangeText(object.level)})`
+                }
+                else if (object.type.name.endsWith(ItemType.TOOL)) {
+                    source.link = this.getWikiLink('Tool Vendor')
+                    source.text = 'Tool Vendor'
                 }
 
                 if (source.text)
                     return source
 
-                // TODO: Finish source mapping
-                return JSON.stringify(object)
+                return 'Unknown'
             },
-            getRowItemId(object, name) {
-                return `crafting-${name}-${object.object.id}`
+            getSourceGatheringText(skill, level) {
+                return `${skill} (${this.getSourceLevelRangeText(level)})`
+            },
+            getSourceLevelRangeText(level, range = 14) {
+                return `${level}-${level + range}`
+            },
+            getSourceLevelRangeRanchingText(level) {
+                let levelRange = this.ranchingAnimalHarvestLevelMap[level]
+
+                return this.getSourceLevelRangeText(level, levelRange.max - levelRange.min)
             },
             getWikiLink(page) {
                 return getWikiLink(page)
@@ -114,7 +144,7 @@
                 return object instanceof Recipe || (object.cost && object.cost.total)
             },
             isSalvageKit(object) {
-                return object.name === SALVAGE_KIT.name
+                return object.name === SALVAGE_KIT_NAME
             },
             valueChange(object, quantity) {
                 return this.$emit('value-change', object, quantity)

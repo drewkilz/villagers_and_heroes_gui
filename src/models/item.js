@@ -1,6 +1,7 @@
 import { Type } from '@/models/type'
 
 export const SALVAGE_KIT_NAME = 'Salvage Kit'
+export const WATER_NAME = 'Water'
 
 export class Item {
     constructor() {
