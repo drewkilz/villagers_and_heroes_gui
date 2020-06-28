@@ -9,108 +9,112 @@
             </p>
         </div>
         <!-- TODO: Implement a crafting list view where you can review and add/remove/update quantities before finalizing the crafting list -->
-        <div v-else style="border: thin solid; margin-bottom: 5px; padding: 5px">
-            <div class="font-weight-bold">
-                Options
-                <b-link size="sm" @click="showHide('options')">
-                    <b-icon-chevron-double-up v-if="show['options']" scale="0.75"></b-icon-chevron-double-up>
-                    <b-icon-chevron-double-down v-else scale="0.75"></b-icon-chevron-double-down>
-                </b-link>
-            </div>
-            <b-form v-show="show['options']">
-                <b-row class="text-left">
-                    <b-col md="auto">
-                        <b-form-checkbox
-                                id="form-salvaging"
-                                class="mb-2 mr-sm-2 mb-sm-0"
-                                v-model="craftingList.options.salvaging"
-                                v-b-tooltip.hover
-                                title="Enable salvaging of ingredients and components from final products">
-                            Salvaging?
-                        </b-form-checkbox>
-                    </b-col>
-                </b-row>
-                <template v-if="craftingList.options.salvaging">
+        <div v-else>
+            <div style="border: thin solid; margin-bottom: 5px; padding: 5px">
+                <div class="font-weight-bold">
+                    Options
+                    <b-link size="sm" @click="showHide('options')">
+                        <b-icon-chevron-double-up v-if="show['options']" scale="0.75"></b-icon-chevron-double-up>
+                        <b-icon-chevron-double-down v-else scale="0.75"></b-icon-chevron-double-down>
+                    </b-link>
+                </div>
+                <b-form v-show="show['options']">
                     <b-row class="text-left">
-                        <b-col cols="3">
-                            <label for="form-ingredient-salvage-percent">Ingredient Salvage Percent</label>
-                        </b-col>
                         <b-col md="auto">
-                            <b-input
-                                    id="form-ingredient-salvage-percent"
-                                    class="mb-2 mr-sm-2 mb-sm-0 ml-2"
-                                    v-model="craftingList.options.ingredientSalvagePercent"
+                            <b-form-checkbox
+                                    id="form-salvaging"
+                                    class="mb-2 mr-sm-2 mb-sm-0"
+                                    v-model="craftingList.options.salvaging"
                                     v-b-tooltip.hover
-                                    title="The percentage at which ingredients are salvaged from final products (default: 65%)"
-                                    :debounce="debounce"
-                                    type="number" number min="1" max="100" step="1"
-                                    size="sm"></b-input>
-                        </b-col>
-                        <b-col md="auto">
-                            %
-                        </b-col>
-                        <div class="w-100"></div>
-                        <b-col cols="3">
-                            <label for="form-component-salvage-percent">Component Salvage Percent</label>
-                        </b-col>
-                        <b-col md="auto">
-                            <b-input
-                                    id="form-component-salvage-percent"
-                                    class="mb-2 mr-sm-2 mb-sm-0 ml-2"
-                                    v-model="craftingList.options.componentSalvagePercent"
-                                    v-b-tooltip.hover
-                                    title="The percentage at which components are salvaged from final products (default: 20%)"
-                                    :debounce="debounce"
-                                    type="number" number min="1" max="100" step="1"
-                                    size="sm"></b-input>
-                        </b-col>
-                        <b-col md="auto">
-                            %
+                                    title="Enable salvaging of ingredients and components from final products">
+                                Salvaging?
+                            </b-form-checkbox>
                         </b-col>
                     </b-row>
-                </template>
-            </b-form>
-        </div>
-        <div v-if="isBusy">
-            <div class="text-center">
-                <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
+                    <template v-if="craftingList.options.salvaging">
+                        <b-row class="text-left">
+                            <b-col cols="3">
+                                <label for="form-ingredient-salvage-percent">Ingredient Salvage Percent</label>
+                            </b-col>
+                            <b-col md="auto">
+                                <b-input
+                                        id="form-ingredient-salvage-percent"
+                                        class="mb-2 mr-sm-2 mb-sm-0 ml-2"
+                                        v-model="craftingList.options.ingredientSalvagePercent"
+                                        v-b-tooltip.hover
+                                        title="The percentage at which ingredients are salvaged from final products (default: 65%)"
+                                        :debounce="debounce"
+                                        type="number" number min="1" max="100" step="1"
+                                        size="sm"></b-input>
+                            </b-col>
+                            <b-col md="auto">
+                                %
+                            </b-col>
+                            <div class="w-100"></div>
+                            <b-col cols="3">
+                                <label for="form-component-salvage-percent">Component Salvage Percent</label>
+                            </b-col>
+                            <b-col md="auto">
+                                <b-input
+                                        id="form-component-salvage-percent"
+                                        class="mb-2 mr-sm-2 mb-sm-0 ml-2"
+                                        v-model="craftingList.options.componentSalvagePercent"
+                                        v-b-tooltip.hover
+                                        title="The percentage at which components are salvaged from final products (default: 20%)"
+                                        :debounce="debounce"
+                                        type="number" number min="1" max="100" step="1"
+                                        size="sm"></b-input>
+                            </b-col>
+                            <b-col md="auto">
+                                %
+                            </b-col>
+                        </b-row>
+                    </template>
+                </b-form>
             </div>
-        </div>
-        <div v-else>
-            <b-table-simple
-                    hover
-                    responsive="true"
-                    head-variant="dark"
-                    :fields="fields"
-                    primary-key="id"
-                    small>
-                <b-thead class="thead-dark">
-                    <b-tr>
-                        <b-th>Name</b-th>
-                        <b-th>Needed</b-th>
-                        <b-th>Obtained</b-th>
-                        <b-th>Total</b-th>
-                        <b-th>Source</b-th>
-                    </b-tr>
-                </b-thead>
-                <CraftingHeaderRow :value='"Items"' name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
-                <tbody v-show="show['items']" v-for="(item, key, index) in craftingList.items" :key="item.id">
-                    <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
-                </tbody>
-                <CraftingHeaderRow :value='"Refined Ingredients"' name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
-                <tbody v-show="show['refined']" v-for="(item, key, index) in craftingList.refined" :key="item.id">
-                    <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
-                </tbody>
-                <CraftingHeaderRow :value='"Crafting Components"' name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
-                <tbody v-show="show['components']" v-for="(item, key, index) in craftingList.components" :key="item.id">
-                    <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
-                </tbody>
-                <CraftingHeaderRow :value='"Final Products"' name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
-                <tbody v-show="show['final']" v-for="(item, key, index) in craftingList.list" :key="item.id">
-                    <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
-                </tbody>
-                <CraftingHeaderRow :value='getTotalCost(craftingList.cost)'></CraftingHeaderRow>
-            </b-table-simple>
+            <div v-if="isBusy">
+                <div class="text-center">
+                    <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
+                </div>
+            </div>
+            <div v-else>
+                <b-table-simple
+                        hover
+                        responsive="true"
+                        head-variant="dark"
+                        :fields="fields"
+                        primary-key="id"
+                        small>
+                    <b-thead class="thead-dark">
+                        <b-tr>
+                            <b-th>Name</b-th>
+                            <b-th>Needed</b-th>
+                            <b-th>Obtained</b-th>
+                            <b-th>Total</b-th>
+                            <b-th>Source</b-th>
+                        </b-tr>
+                    </b-thead>
+                    <CraftingHeaderRow :value='"Items"' name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
+                    <tbody v-show="show['items']" v-for="(item, key, index) in craftingList.items" :key="item.id">
+                        <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+                    </tbody>
+                    <CraftingHeaderRow :value='"Refined Ingredients"' name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
+                    <tbody v-show="show['refined']" v-for="(item, key, index) in craftingList.refined" :key="item.id">
+                        <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+                    </tbody>
+                    <CraftingHeaderRow :value='"Crafting Components"' name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
+                    <tbody v-show="show['components']" v-for="(item, key, index) in craftingList.components" :key="item.id">
+                        <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+                    </tbody>
+                    <!-- TODO: When updating obtained quantities with salvaging checked, it does some funky stuff - need to add in salvaging to the quantities somehow or do something -->
+                    <!-- TODO: Add in ability to update/delete final product needed quantities, etc. -->
+                    <CraftingHeaderRow :value='"Final Products"' name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
+                    <tbody v-show="show['final']" v-for="(item, key, index) in craftingList.list" :key="item.id">
+                        <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
+                    </tbody>
+                    <CraftingHeaderRow :value='getTotalCost(craftingList.cost)'></CraftingHeaderRow>
+                </b-table-simple>
+            </div>
         </div>
     </div>
 </template>
