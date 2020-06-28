@@ -19,12 +19,14 @@ export class CraftingList {
         let quantity_ = quantity.total
 
         if (this.options.salvaging && recipe.item.salvageable) {
-            if (!(SALVAGE_KIT.name in this.list.items)) {
-                this.list.items[SALVAGE_KIT.name] = new CraftingObject(
+            if (!(SALVAGE_KIT.name in this.items)) {
+                this.items[SALVAGE_KIT.name] = new CraftingObject(
                     SALVAGE_KIT.clone(), new CraftingQuantity(0, SALVAGE_KIT.stackSize))
             }
 
-            this.list.items[SALVAGE_KIT.name].quantity.total += quantity
+            // TODO: Salvage kit is not reactive
+            this.items[SALVAGE_KIT.name].quantity.total += quantity.total
+            this.items[SALVAGE_KIT.name].neededQuantity.total += quantity.total
         }
 
         for (let ingredientKey in recipe.ingredients) {
@@ -39,7 +41,7 @@ export class CraftingList {
                 else if (ingredient.item.type.name === ItemType.INGREDIENT)
                     percent = this.options.ingredientSalvagePercent
 
-                quantity_ = Math.ceil(quantity * (100 - percent) / 100)
+                quantity_ = Math.ceil(quantity.total * (100 - percent) / 100)
             }
 
             const subRecipe = await getRecipe(ingredient.item.name)
