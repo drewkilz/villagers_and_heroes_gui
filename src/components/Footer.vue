@@ -63,4 +63,13 @@
         border: none;
     }
 
+    .footer a {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer a:hover {
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+    }
+
 </style>

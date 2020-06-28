@@ -98,4 +98,13 @@
     .content-header {
         font-weight: bold;
     }
+
+    a {
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    a:hover {
+        color: rgba(0, 0, 0, 0.75);
+        text-decoration: none;
+    }
 </style>
