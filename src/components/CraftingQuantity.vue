@@ -14,21 +14,21 @@
             <b-input-group size="sm">
                 <b-form-input v-if="object.quantity.stacks >= 1" v-model="object.obtainedQuantity.stacks" size="sm"
                               style="max-width: 49px" :debounce="debounce" type="number" number min="0"
-                              :max="object.quantity.stacks" step="1" v-b-tooltip:hover title="Stacks"
+                              :max="object.quantity.stacks" step="1" v-b-tooltip.hover title="Stacks"
                               :formatter="stacksFormatter">
                 </b-form-input>
                 <b-form-input v-if="object.quantity.stacks >= 1" v-model="object.obtainedQuantity.remainder" size="sm"
                               style="max-width: 56px" :debounce="debounce" type="number" number min="0"
                               :max="object.quantity.stacks === object.obtainedQuantity.stacks ? object.quantity.remainder : object.quantity.stackSize"
-                              step="1" v-b-tooltip:hover title="Stack Remainder"
+                              step="1" v-b-tooltip.hover title="Stack Remainder"
                               :formatter="remainderFormatter">
                 </b-form-input>
                 <b-form-input v-model="object.obtainedQuantity.total" size="sm" style="max-width: 72px" :debounce="debounce"
-                              type="number" number min="0" :max="object.quantity.total" step="1" v-b-tooltip:hover
+                              type="number" number min="0" :max="object.quantity.total" step="1" v-b-tooltip.hover
                               title="Total"
                               :formatter="totalFormatter">
                 </b-form-input>
-                <b-button v-if="complete" size="sm" @click="markAsComplete" v-b-tooltip:hover title="Mark as Completed" variant="outline-dark">
+                <b-button v-if="complete" size="sm" @click="markAsComplete" v-b-tooltip.hover title="Mark as Completed" variant="outline-dark">
                     <b-icon-check></b-icon-check>
                 </b-button>
             </b-input-group>

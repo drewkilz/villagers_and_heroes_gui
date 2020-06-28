@@ -13,7 +13,7 @@
             <b-popover
                     :target="getRowItemId(object, 'name-link')"
                     placement="bottomright"
-                    triggers="hover focus"
+                    triggers="hover"
                     v-if="isRecipeOrHasCost(object.object)">
                 <template v-slot:title>{{ object.object.name }}</template>
                 <ul>

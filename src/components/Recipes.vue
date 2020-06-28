@@ -63,7 +63,7 @@
                 <b-popover
                         target="header-add"
                         placement="left"
-                        triggers="hover focus">
+                        triggers="hover">
                     <template v-slot:title>Add to Crafting List</template>
                     <div>
                         Enter a quantity then click the <b-icon-cart-plus></b-icon-cart-plus> icon to the right to add
@@ -86,7 +86,7 @@
                 <b-popover
                         :target="getRowItemId(row.index, 'name-link')"
                         placement="bottomright"
-                        triggers="hover focus">
+                        triggers="hover">
                     <template v-slot:title>{{ row.item.object.name }}</template>
                     <ul>
                         <li v-for="ingredient in row.item.object.ingredients" :key="ingredient.id">

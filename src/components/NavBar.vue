@@ -20,7 +20,7 @@
                 <b-popover
                         target="crafting-list-icon"
                         placement="left"
-                        triggers="hover focus">
+                        triggers="hover">
                     <template v-slot:title>Crafting List</template>
                     <b-table
                             striped
@@ -50,7 +50,7 @@
                     </b-table>
                 </b-popover>
                 <b-nav-item right>
-                    <b-iconstack v-b-tooltip:hover title="Clear Crafting List" v-on:click="clearCraftingList">
+                    <b-iconstack v-b-tooltip.hover title="Clear Crafting List" v-on:click="clearCraftingList">
                         <b-icon-cart stacked variant="" scale="0.75"></b-icon-cart>
                         <b-icon-slash-square stacked variant="secondary"></b-icon-slash-square>
                     </b-iconstack>
