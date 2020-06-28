@@ -219,6 +219,12 @@
                 }
                 else {
                     // Reduce/Increment the needed quantity
+                    if (object.neededQuantity.total + difference < 0) {
+                        // Ensure the difference will not make us dip below zero, for example, when 180 remainder are
+                        //  needed and the total is 1 stack, 120 remainder, then if you enter 1 into the stack input, it
+                        //  would remove 350 and put us into negative territory
+                        difference = 0 - object.neededQuantity.total
+                    }
                     object.neededQuantity.total += difference
                 }
 
