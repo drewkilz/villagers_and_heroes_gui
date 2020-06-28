@@ -1,5 +1,5 @@
 <template>
-    <b-tr :class="index % 2 ? 'alternate-row' : ''">
+    <b-tr :class="index % 2 ? 'alternate-row' : ''" :variant="this.object.neededQuantity.total === 0 ? 'success' : ''">
         <b-td>
             <b-link :id="getRowItemId(object, 'name-link')"
                     :href="getWikiLink(object.object.name)"
