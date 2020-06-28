@@ -94,21 +94,23 @@
                             <b-th>Source</b-th>
                         </b-tr>
                     </b-thead>
-                    <CraftingHeaderRow :value='"Items"' name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
+                    <!-- TODO: needed and total are not matching with lots of items - I tried 40 each of level 45-49 shaman gear -->
+                    <CraftingHeaderRow value="Items" name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
+                    <!-- TODO: Add sorting by source type and level -->
                     <tbody v-show="show['items']" v-for="(item, key, index) in craftingList.items" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
-                    <CraftingHeaderRow :value='"Refined Ingredients"' name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
+                    <CraftingHeaderRow value="Refined Ingredients" name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
                     <tbody v-show="show['refined']" v-for="(item, key, index) in craftingList.refined" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
-                    <CraftingHeaderRow :value='"Crafting Components"' name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
+                    <CraftingHeaderRow value="Crafting Components" name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
                     <tbody v-show="show['components']" v-for="(item, key, index) in craftingList.components" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <!-- TODO: When updating obtained quantities with salvaging checked, it does some funky stuff - need to add in salvaging to the quantities somehow or do something -->
                     <!-- TODO: Add in ability to update/delete final product needed quantities, etc. -->
-                    <CraftingHeaderRow :value='"Final Products"' name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
+                    <CraftingHeaderRow value="Final Products" name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
                     <tbody v-show="show['final']" v-for="(item, key, index) in craftingList.list" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
