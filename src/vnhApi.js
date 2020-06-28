@@ -10,6 +10,8 @@ export let SALVAGE_KIT = null
 export function getCategory(name) {
     return Vue.prototype.axiosVnhApi.get(`categories/${name}`)
         .then(response => {
+            if (response.status === 204)
+                return null
             return Category.fromJson(response.data)
         })
         .catch(() => {
@@ -20,6 +22,8 @@ export function getCategory(name) {
 export function getItem(name) {
     return Vue.prototype.axiosVnhApi.get(`items/${name}`)
         .then(response => {
+            if (response.status === 204)
+                return null
             return Item.fromJson(response.data)
         })
         .catch(() => {
@@ -30,6 +34,8 @@ export function getItem(name) {
 export function getRecipe(name) {
     return Vue.prototype.axiosVnhApi.get(`recipes/${name}`)
         .then(response => {
+            if (response.status === 204)
+                return null
             return Recipe.fromJson(response.data)
         })
         .catch(() => {
