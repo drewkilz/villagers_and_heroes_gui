@@ -94,7 +94,6 @@
                             <b-th>Source</b-th>
                         </b-tr>
                     </b-thead>
-                    <!-- TODO: needed and total are not matching with lots of items - I tried 40 each of level 45-49 shaman gear -->
                     <CraftingHeaderRow value="Items" name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
                     <!-- TODO: Add sorting by source type and level -->
                     <tbody v-show="show['items']" v-for="(item, key, index) in craftingList.items" :key="item.id">
