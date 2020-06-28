@@ -48,6 +48,11 @@
         },
         computed: {
             percentage() {
+                if (this.total[this.quantityKey] === 0) {
+                    // When the total is zero, then 100%, so the icon is full
+                    return 1
+                }
+
                 // TODO: There is a bug in the visualization when displaying remainders - not sure the best way to
                 //  display remainder filling as it can fluctuate based on the user incrementing/decrementing/setting
                 //  the value in obtained for the needed visualization, but remains set for the total visualization -
