@@ -103,7 +103,7 @@ export class CraftingList {
             this.list[recipe.name].quantity.total += quantity
     }
 
-    async calculate() {
+    async calculate(calculatedRecipes) {
         this.reset()
 
         for (let key in this.list) {
@@ -113,6 +113,8 @@ export class CraftingList {
 
             // Add the object to the dictionary of all objects for fast lookups with a better quantity object
             this.all[key] = object
+
+            calculatedRecipes.count += 1
         }
     }
 

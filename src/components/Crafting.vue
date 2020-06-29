@@ -74,7 +74,9 @@
             </div>
             <div v-if="isBusy">
                 <div class="text-center">
-                    <b-spinner small class="align-middle"></b-spinner> <strong>Loading...</strong>
+                    <b-spinner small class="align-middle"></b-spinner>
+                    <div class="font-weight-bold" v-if="!calculatedRecipes.count">Calculating...</div>
+                    <div v-else>{{ calculatedRecipes.count }} of {{ this.craftingList.count }} recipes calculated...</div>
                 </div>
             </div>
             <div v-else>
@@ -150,6 +152,7 @@
                 craftingObjects: [],
                 craftingQuantities: [],
                 debounce: 200,
+                calculatedRecipes: {count: 0},
                 show: {
                     options: true,
                     items: true,
@@ -163,10 +166,11 @@
             calculateList() {
                 this.isBusy = true
 
+                this.calculatedRecipes = {'count': 0}
                 this.craftingObjects = []
                 this.craftingQuantities = []
 
-                this.craftingList.calculate().then(() => {
+                this.craftingList.calculate(this.calculatedRecipes).then(() => {
                     for (let key in this.craftingList.all) {
                         let object = this.craftingList.all[key]
 
