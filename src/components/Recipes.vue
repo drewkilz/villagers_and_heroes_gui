@@ -49,6 +49,12 @@
                     </b-th>
                     <b-th>
                         <b-input-group size="sm">
+                            <b-form-select v-model="rarityFilter" :options="rarityOptions" multiple>
+                            </b-form-select>
+                        </b-input-group>
+                    </b-th>
+                    <b-th>
+                        <b-input-group size="sm">
                             <b-form-select v-model="typeFilter" :options="typeOptions" multiple>
                             </b-form-select>
                         </b-input-group>
@@ -133,6 +139,7 @@
                     {key: 'class', sortable: true, formatter: 'getClassName'},
                     {key: 'subclass', sortable: true, formatter: 'getSubClassName', label:'Sub-Class'},
                     {key: 'skill', sortable: true, formatter: 'getEnumValue'},
+                    {key: 'rarity', sortable: true, formatter: 'getRarity'},
                     {key: 'type', sortable: true, formatter: 'getEnumValue'},
                     {key: 'add', label: ''}
                 ],
@@ -150,6 +157,7 @@
                 classFilter: [],
                 subclassFilter: [],
                 skillFilter: [],
+                rarityFilter: [],
                 typeFilter: [],
 
                 classOptions: [],
@@ -214,6 +222,7 @@
                 this.classFilter = []
                 this.subclassFilter = []
                 this.skillFilter = []
+                this.rarityFilter = []
                 this.typeFilter = []
             },
             getClassName(value, key, item) {
@@ -241,6 +250,9 @@
 
                     return options
                 })
+            },
+            getRarity(value, key, item) {
+                return item.object.item.rarity.name
             },
             getRowItemId(index, name) {
                 return `recipes-${name}-${index}`
@@ -278,6 +290,7 @@
             this.getOptions('Category', 'Sub Class').then(data => {this.subclassOptions = data})
             this.getOptions('Skill', 'Crafting').then(data => {this.skillOptions = data})
             this.getOptions('Category', 'Crafting Type').then(data => {this.typeOptions = data})
+            this.getOptions('Category', 'Rarity').then(data => {this.rarityOptions = data})
         },
         watch: {
             nameFilter(newVal) {
@@ -297,6 +310,9 @@
             },
             skillFilter(newVal) {
                 this.changeFilter(newVal, 'skill', 'in')
+            },
+            rarityFilter(newVal) {
+                this.changeFilter(newVal, 'rarity', 'in')
             },
             typeFilter(newVal) {
                 this.changeFilter(newVal, 'type', 'in')

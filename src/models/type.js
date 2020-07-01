@@ -46,6 +46,14 @@ export class VillageSkill {
     static RANCHING = SkillType.RANCHING
 }
 
+export class Rarity {
+    static COMMON = 'Common'
+    static UNCOMMON = 'Uncommon'
+    static RARE = 'Rare'
+    static EPIC = 'Epic'
+    static LEGENDARY = 'Legendary'
+}
+
 export class Type {
     constructor() {
         this.id = null
