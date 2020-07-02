@@ -1,6 +1,6 @@
 import {Recipe} from "@/models/recipe";
 import {SALVAGE_KIT_NAME, WATER_NAME} from "@/models/item";
-import {GatheringSkillType, ItemType} from "@/models/type";
+import {CraftingType, GatheringSkillType, ItemType} from "@/models/type";
 import {getWikiLink} from "@/utility";
 
 let ranchingAnimalHarvestLevelMap = {
@@ -21,6 +21,12 @@ export function getSource(object) {
 
     if (object instanceof Recipe) {
         source.text = `${object.skill.name} (${object.level})`
+
+        if (!(object.type.name === CraftingType.COMPONENT || object.type.name === CraftingType.REFINED)) {
+            // Add the type if not component or refined (so, effectively just the final products)
+            source.text += `: ${object.type.name}`
+        }
+
 
         if (object.type.name.endsWith('Leather'))
             source.text += `, Beasts (${getSourceLevelRangeText(object.level)})`
