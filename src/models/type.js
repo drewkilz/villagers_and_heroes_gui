@@ -1,17 +1,64 @@
 export class CraftingType {
-    static COMPONENT = 'Crafting Components'
+    static SWORD = 'Warrior Swords'
+    static STAFF = 'Wizard Staffs'
+    static MACE = 'Priest Maces'
+    static BOW = 'Hunter Bows'
+    static AXE = 'Shaman Axes'
+
+    static ARMOR = 'Armor and Outfits'
+    static BELT = 'Belts'
+    static GLOVE = 'Gloves'
+    static BOOTS = 'Boots and Shoes'
+    static HATS = 'Hats and Helms'
+    static SHIELD = 'Priest, Shaman, and Warrior Shields'
+
+    static TRINKET = 'Carved Trinkets'
+
     static REFINED = 'Refined Ingredients'
+    static TOOL = 'Crafting Tools'
+    static SPECIAL = 'Special Recipes'
+    static COMPONENT = 'Crafting Components'
+    static NECKLACE = "Crafter's Necklaces"
+
+    static POWDER = 'Metal Powder and Mineral Oil'
+    static EMBROIDERY = 'Cloth Embroidery and Leather Stitching'
+    static RESIN = 'Wood Resins and Pitch'
+
+    static FOOD = 'Cooked Food and Baked Goods'
+    static HEALTH = 'Health Potions'
+    static MANA = 'Mana Potions'
+    static DRAM = 'Drams'
+    static TRIAD = 'Triad Potions'
 }
 
 export class ItemType {
-    static COMPONENT = 'Crafting Component'
-    static INGREDIENT = 'Crafting Ingredient'
     static MINERAL = 'Mineral'
+    static INGREDIENT = 'Crafting Ingredient'
+    static COMPONENT = 'Crafting Component'
     static BUG = 'Bug'
     static FISH = 'Fish'
     static PLANT = 'Plant'
     static ITEM = 'Item'
+    static PREPARATION = 'Preparation'
+    static SWORD = 'Sword'
+    static STAFF = 'Staff'
+    static MACE = 'Mace'
+    static BOW = 'Bow'
+    static AXE = 'Axe'
+    static HEADWEAR = 'Headwear'
+    static SHIELD = 'Shield'
+    static NECKLACE = 'Necklace'
+    static BELT = 'Belt'
+    static RING = 'Ring'
+    static TRINKET = 'Trinket'
+    static TOTEM = 'Totem'
+    static BOOTS = 'Boots'
+    static GLOVE = 'Glove'
+    static ARMOR = 'Armor'
     static TOOL = 'Tool'
+    static CONSUMABLE = 'Consumable'
+    static HARVEST = 'Harvest'
+    static QUEST = 'Quest Item'
 }
 
 export class SkillType {
