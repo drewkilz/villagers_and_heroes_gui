@@ -8,7 +8,7 @@
                 {{ object.object.name }}
             </b-link>
             <template v-if="isSalvageKit(object.object)">
-                <span v-b-tooltip.hover title="The number of items displayed for Salvage Kits is the number of charges needed, not the number of kits.">***</span>
+                <span v-b-tooltip.hover title="The number of items displayed for Salvage Kits is the number of charges needed. The stacks is the number of Salvage Kits needed.">***</span>
             </template>
             <b-popover
                     :target="getRowItemId(object, 'name-link')"
