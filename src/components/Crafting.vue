@@ -98,21 +98,21 @@
                     </b-thead>
                     <CraftingHeaderRow value="Items" name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
                     <!-- TODO: Add sorting by source type and level -->
-                    <tbody v-show="show['items']" v-for="(item, key, index) in craftingList.items" :key="item.id">
+                    <tbody v-show="show['items']" v-for="(item, index) in sortBySourceAndLevel(craftingList.items)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <CraftingHeaderRow value="Refined Ingredients" name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
-                    <tbody v-show="show['refined']" v-for="(item, key, index) in craftingList.refined" :key="item.id">
+                    <tbody v-show="show['refined']" v-for="(item, index) in sortBySourceAndLevel(craftingList.refined)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <CraftingHeaderRow value="Crafting Components" name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
-                    <tbody v-show="show['components']" v-for="(item, key, index) in craftingList.components" :key="item.id">
+                    <tbody v-show="show['components']" v-for="(item, index) in sortBySourceAndLevel(craftingList.components)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <!-- TODO: When updating obtained quantities with salvaging checked, it does some funky stuff - need to add in salvaging to the quantities somehow or do something -->
                     <!-- TODO: Add in ability to update/delete final product needed quantities, etc. -->
                     <CraftingHeaderRow value="Final Products" name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
-                    <tbody v-show="show['final']" v-for="(item, key, index) in craftingList.list" :key="item.id">
+                    <tbody v-show="show['final']" v-for="(item, index) in sortBySourceAndLevel(craftingList.list)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <CraftingHeaderRow :value='getTotalCost(craftingList.cost)'></CraftingHeaderRow>
@@ -126,6 +126,8 @@
     import CraftingHeaderRow from '@/components/CraftingHeaderRow'
     import CraftingItemRow from '@/components/CraftingItemRow'
     import { CraftingList } from '@/crafting/list'
+    import { getSource } from '@/crafting/source'
+    import { compareValues } from "@/utility";
 
     export default {
         name: 'Crafting',
@@ -191,6 +193,23 @@
             },
             showHide(name) {
                 this.show[name] = !this.show[name]
+            },
+            sortBySourceAndLevel(list) {
+                let sortingList = []
+
+                for (let key in list) {
+                    let object = list[key]
+                    sortingList.push({craftingObject: object, source: getSource(object.object)})
+                }
+
+                sortingList.sort(compareValues('source.text'))
+
+                let sortedList = []
+
+                for (let index in sortingList)
+                    sortedList.push(sortingList[index].craftingObject)
+
+                return sortedList
             },
             switchContent(content) {
                 return this.$emit('switch-content', content)
