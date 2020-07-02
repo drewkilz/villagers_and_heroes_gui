@@ -118,6 +118,11 @@ export class CraftingList {
         }
     }
 
+    remove(recipe) {
+        if (recipe.name in this.list)
+            delete this.list[recipe.name]
+    }
+
     reset(list = false) {
         if (list)
             this.list = {}

@@ -15,7 +15,7 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item right id="crafting-list-icon">
                     <span v-if="craftingListCount" :key="craftingListCount">({{ craftingListCount }}) </span>
-                    <b-icon-cart></b-icon-cart>
+                    <b-icon-cart v-on:click="switchContent('craftingList')"></b-icon-cart>
                 </b-nav-item>
                 <b-popover
                         target="crafting-list-icon"

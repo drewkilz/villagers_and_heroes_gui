@@ -12,19 +12,19 @@
         </div>
         <div v-else>
             <b-input-group size="sm">
-                <b-form-input v-if="object.quantity.stacks >= 1" v-model="object.obtainedQuantity.stacks" size="sm"
+                <b-form-input v-if="object.quantity.stacks >= 1" v-model="stacks" size="sm"
                               style="max-width: 49px" :debounce="debounce" type="number" number min="0"
-                              :max="object.quantity.stacks" step="1" v-b-tooltip.hover title="Stacks"
+                              :max="stacksMax" step="1" v-b-tooltip.hover title="Stacks"
                               :formatter="stacksFormatter">
                 </b-form-input>
-                <b-form-input v-if="object.quantity.stacks >= 1" v-model="object.obtainedQuantity.remainder" size="sm"
+                <b-form-input v-if="object.quantity.stacks >= 1" v-model="remainder" size="sm"
                               style="max-width: 56px" :debounce="debounce" type="number" number min="0"
-                              :max="object.quantity.stacks === object.obtainedQuantity.stacks ? object.quantity.remainder : object.quantity.stackSize"
+                              :max="remainderMax"
                               step="1" v-b-tooltip.hover title="Stack Remainder"
                               :formatter="remainderFormatter">
                 </b-form-input>
-                <b-form-input v-model="object.obtainedQuantity.total" size="sm" style="max-width: 72px" :debounce="debounce"
-                              type="number" number min="0" :max="object.quantity.total" step="1" v-b-tooltip.hover
+                <b-form-input v-model="total" size="sm" style="max-width: 72px" :debounce="debounce"
+                              type="number" number min="0" :max="totalMax" step="1" v-b-tooltip.hover
                               title="Total"
                               :formatter="totalFormatter">
                 </b-form-input>
@@ -56,17 +56,63 @@
                 type: Boolean,
                 default: false
             },
-            initializeToValues: {
+            readonly: {
                 type: Boolean,
                 default: false
             },
-            readonly: {
+            noMax: {
                 type: Boolean,
                 default: false
             }
         },
         components: {
             ItemsVisualization
+        },
+        computed: {
+            quantity() {
+                let quantity = this.object.obtainedQuantity
+                if (this.type === 'total')
+                    quantity = this.object.quantity
+                return quantity
+            },
+            remainderMax() {
+                return this.object.quantity.stacks === this.object.obtainedQuantity.stacks ?
+                    this.object.quantity.remainder : this.object.quantity.stackSize
+            },
+            remainder: {
+                get: function() {
+                    return this.quantity.remainder
+                },
+                set: function(value) {
+                    this.quantity.remainder = value
+                }
+            },
+            stacksMax() {
+                if (this.noMax)
+                    return ''
+                return this.object.quantity.stacks
+            },
+            stacks: {
+                get: function() {
+                    return this.quantity.stacks
+                },
+                set: function(value) {
+                    this.quantity.stacks = value
+                }
+            },
+            totalMax() {
+                if (this.noMax)
+                    return ''
+                return this.object.quantity.total
+            },
+            total: {
+                get: function() {
+                    return this.quantity.total
+                },
+                set: function(value) {
+                    this.quantity.total = value
+                }
+            }
         },
         data() {
             return {
@@ -76,7 +122,7 @@
         },
         methods: {
             stacksFormatter(value) {
-                if (value > this.object.quantity.stacks)
+                if (value > this.object.quantity.stacks && !this.noMax)
                     return this.object.quantity.stacks
                 return value
             },
@@ -86,7 +132,7 @@
                 return value
             },
             totalFormatter(value) {
-                if (value > this.object.quantity.total)
+                if (value > this.object.quantity.total && !this.noMax)
                     return this.object.quantity.total
                 return value
             },

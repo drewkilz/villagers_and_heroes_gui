@@ -8,8 +8,21 @@
                 <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
             </p>
         </div>
-        <!-- TODO: Implement a crafting list view where you can review and add/remove/update quantities before finalizing the crafting list -->
         <div v-else>
+            <div class="font-italic">
+                If you need to modify your crafting list:
+                <ul>
+                    <li>
+                        Click the <b-icon-cart></b-icon-cart> icon in the top right to add/remove quantities from
+                        currently items
+                    </li>
+                    <li>
+                        To add new recipes, you can do so in either the
+                        <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or
+                        <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool
+                    </li>
+                </ul>
+            </div>
             <div style="border: thin solid; margin-bottom: 5px; padding: 5px">
                 <div class="font-weight-bold">
                     Options
@@ -109,7 +122,6 @@
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <!-- TODO: When updating obtained quantities with salvaging checked, it does some funky stuff - need to add in salvaging to the quantities somehow or do something -->
-                    <!-- TODO: Add in ability to update/delete final product needed quantities, etc. -->
                     <CraftingHeaderRow value="Final Products" name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
                     <tbody v-show="show['final']" v-for="(item, index) in sortBySourceAndLevel(craftingList.list)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
@@ -126,7 +138,7 @@
     import CraftingItemRow from '@/components/CraftingItemRow'
     import { CraftingList } from '@/crafting/list'
     import { getSource } from '@/crafting/source'
-    import { compareValues } from "@/utility";
+    import { compareValues } from '@/utility';
 
     export default {
         name: 'Crafting',

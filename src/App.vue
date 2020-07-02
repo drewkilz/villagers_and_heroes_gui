@@ -10,7 +10,9 @@
             <component v-bind:is="currentContentComponent"
                        @switch-content="switchContent"
                        :craftingList="craftingList"
-                       @add-to-crafting-list="addToCraftingList"></component>
+                       @add-to-crafting-list="addToCraftingList"
+                       @clear-crafting-list="clearCraftingList"
+                       @remove-from-crafting-list="removeFromCraftingList"></component>
         </b-container>
         <Footer @switch-content="switchContent"></Footer>
     </div>
@@ -18,13 +20,14 @@
 
 <script>
     import Crafting from '@/components/Crafting'
+    import CraftingList from '@/components/CraftingList'
     import Credits from '@/components/Credits'
     import Footer from '@/components/Footer'
     import Home from '@/components/Home'
     import NavBar from '@/components/NavBar'
     import NotFound from '@/components/NotFound'
     import Recipes from '@/components/Recipes'
-    import { CraftingList } from '@/crafting/list'
+    import { CraftingList as _CraftingList } from '@/crafting/list'
 
     export default {
         name: 'App',
@@ -35,7 +38,8 @@
             Recipes,
             NotFound,
             Crafting,
-            Credits
+            Credits,
+            CraftingList
         },
         data() {
             return {
@@ -47,6 +51,7 @@
                     // TODO: Use vue.router
                     home: {component: 'Home'},
                     crafting: {component: 'Crafting'},
+                    craftingList: {component: 'CraftingList', title: 'Crafting List'},
                     // TODO: equipment: {component: 'Equipment'}, <!-- TODO: As part of the equipment, enable a way to select all for a series of levels? like 16-29, for example? -->
                     recipes: {component: 'Recipes'},
                     // TODO: village: {component: 'Village'},
@@ -54,7 +59,7 @@
                     notFound: {component: 'NotFound', title: '404 :: Not Found'},
                     credits: {component: 'Credits'}
                 },
-                craftingList: new CraftingList()
+                craftingList: new _CraftingList()
             }
         },
         methods: {
@@ -74,6 +79,10 @@
             },
             clearCraftingList() {
                 this.craftingList.reset(true)
+                this.$refs.navBar.updateCraftingListCount()
+            },
+            removeFromCraftingList(object) {
+                this.craftingList.remove(object.object)
                 this.$refs.navBar.updateCraftingListCount()
             }
         },

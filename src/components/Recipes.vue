@@ -83,25 +83,7 @@
                 </div>
             </template>
             <template v-slot:cell(name)="row">
-                <b-link :id="getRowItemId(row.index, 'name-link')"
-                        :href="getWikiLink(row.item.object.name)"
-                        target="_blank"
-                        rel="noopener">
-                    {{ row.item.object.name }}
-                </b-link>
-                <b-popover
-                        :target="getRowItemId(row.index, 'name-link')"
-                        placement="bottomright"
-                        triggers="hover">
-                    <template v-slot:title>{{ row.item.object.name }}</template>
-                    <ul>
-                        <li v-for="ingredient in row.item.object.ingredients" :key="ingredient.id">
-                            {{ ingredient.quantity }}
-                            {{ ingredient.item.name }}
-                        </li>
-                        <li v-if="row.item.object.cost.total > 0">{{row.item.object.cost }}</li>
-                    </ul>
-                </b-popover>
+                <RecipeName :recipe="row.item.object" :index="row.index"></RecipeName>
             </template>
             <template v-slot:cell(add)="row">
                 <b-input-group size="sm">
@@ -124,12 +106,16 @@
 </template>
 
 <script>
+    import RecipeName from '@/components/RecipeName'
     import { CraftingObject } from '@/crafting/object'
     import { compareValues, getWikiLink } from '@/utility'
     import { getCategory, getRecipes, getSkills } from '@/vnhApi'
 
     export default {
         name: 'Recipes',
+        components: {
+            RecipeName
+        },
         data() {
             return {
                 debounce: 200,
