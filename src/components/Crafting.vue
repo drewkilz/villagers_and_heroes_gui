@@ -97,7 +97,6 @@
                         </b-tr>
                     </b-thead>
                     <CraftingHeaderRow value="Items" name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
-                    <!-- TODO: Add sorting by source type and level -->
                     <tbody v-show="show['items']" v-for="(item, index) in sortBySourceAndLevel(craftingList.items)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
