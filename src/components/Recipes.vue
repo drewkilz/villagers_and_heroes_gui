@@ -163,6 +163,7 @@
                 classOptions: [],
                 subclassOptions: [],
                 skillOptions: [],
+                rarityOptions: [],
                 typeOptions: []
             }
         },
