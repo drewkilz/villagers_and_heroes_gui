@@ -40,3 +40,20 @@ export function compareValues(key, order = 'asc') {
 export function getWikiLink(page) {
     return `https://villagersandheroes.gamepedia.com/${encodeURI(page.replace(/ /g, '_'))}`
 }
+
+export function toRoman(number){
+    let roman = ''
+    const romanNumerals = {X: 10, IX: 9, V: 5, IV: 4, I: 1}
+
+    for (let key in romanNumerals){
+        let a = Math.floor(number / romanNumerals[key])
+        if (a >= 0) {
+            for (let i = 0; i < a; i++){
+                roman += key
+            }
+        }
+        number = number % romanNumerals[key]
+    }
+
+    return roman
+}

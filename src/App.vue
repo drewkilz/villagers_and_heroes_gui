@@ -27,6 +27,7 @@
     import NavBar from '@/components/NavBar'
     import NotFound from '@/components/NotFound'
     import Recipes from '@/components/Recipes'
+    import Party from '@/components/Party'
     import { CraftingList as _CraftingList } from '@/crafting/list'
 
     export default {
@@ -39,7 +40,8 @@
             NotFound,
             Crafting,
             Credits,
-            CraftingList
+            CraftingList,
+            Party
         },
         data() {
             return {
@@ -55,7 +57,7 @@
                     // TODO: equipment: {component: 'Equipment'}, <!-- TODO: As part of the equipment, enable a way to select all for a series of levels? like 16-29, for example? -->
                     recipes: {component: 'Recipes'},
                     // TODO: village: {component: 'Village'},
-                    // TODO: party: {component: 'Party', title: 'Crafting Party'},
+                    party: {component: 'Party', title: 'Crafting Party'},
                     notFound: {component: 'NotFound', title: '404 :: Not Found'},
                     credits: {component: 'Credits'}
                 },
