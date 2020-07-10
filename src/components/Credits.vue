@@ -12,6 +12,12 @@
             awesome game.
         </dd>
         <br />
+        <dt><a href="https://villagersandheroes.gamepedia.com" target="_blank" rel="noopener">Villagers & Heroes Wiki</a></dt>
+        <dd>
+            Links to the gamepedia pages of items are included for all recipes. Thanks to the contributors who keep
+            adding and modifying the incredibly useful information found on the Wiki.
+        </dd>
+        <br />
         <dt><a href="https://ffxivcrafting.com" target="_blank" rel="noopener">FFXIV Crafting</a></dt>
         <dd>
             This website was inspired by the work of TickThokk on FFXIV Crafting.
