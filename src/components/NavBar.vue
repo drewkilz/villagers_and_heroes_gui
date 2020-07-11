@@ -6,10 +6,11 @@
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
                     <b-nav-item href="#" v-on:click="switchContent('crafting')">Crafting</b-nav-item>
-                    <b-nav-item href="#" v-on:click="switchContent('equipment')">Equipment</b-nav-item>
                     <b-nav-item href="#" v-on:click="switchContent('recipes')">Recipes</b-nav-item>
-                    <b-nav-item href="#" v-on:click="switchContent('village')">Village</b-nav-item>
+                    <!--<b-nav-item href="#" v-on:click="switchContent('equipment')">Equipment</b-nav-item>-->
                     <b-nav-item href="#" v-on:click="switchContent('party')">Crafting Party</b-nav-item>
+                    <!--<b-nav-item href="#" v-on:click="switchContent('village')">Village</b-nav-item>-->
+                    <!--<b-nav-item href="#" v-on:click="switchContent('upload')">Upload</b-nav-item>-->
                 </b-navbar-nav>
             </b-collapse>
             <b-navbar-nav class="ml-auto">
@@ -33,8 +34,8 @@
                         <template v-slot:empty>
                             <p>No recipes selected.</p>
                             <p>
-                                You can select the recipes and quantities to craft in either the
-                                <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or
+                                You can select the recipes and quantities to craft in the
+                                <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or -->
                                 <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
                             </p>
                         </template>

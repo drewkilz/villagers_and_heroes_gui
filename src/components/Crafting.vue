@@ -3,8 +3,8 @@
         <div v-if="!craftingList.count && !isBusy">
             <p>No recipes selected.</p>
             <p>
-                You can select the recipes and quantities to craft in either the
-                <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or
+                You can select the recipes and quantities to craft in the
+                <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or-->
                 <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
             </p>
         </div>
@@ -17,8 +17,8 @@
                         currently items
                     </li>
                     <li>
-                        To add new recipes, you can do so in either the
-                        <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or
+                        To add new recipes, you can do so in the
+                        <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or-->
                         <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool
                     </li>
                 </ul>
