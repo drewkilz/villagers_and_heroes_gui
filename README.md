@@ -54,11 +54,6 @@ Original deployment was done via:
     cp .env .env.production
     vi .env.production
     
-        # TODO: Remove
-        VUE_APP_TITLE="Villagers & Heroes Utilities"
-        VUE_APP_VNH_API_TOKEN='"gui"._3FOCvjytnH-Cwm5TNUgxUJpuW4'
-        VUE_APP_VNH_API_URL=http://159.65.108.26:80/api/v1/
-    
     # allows access to the local update store
     sudo chown -R $USER:$(id -gn $USER) /home/vnh/.config
     
