@@ -7,7 +7,7 @@ node_modules
 .env.*.local
 
 # Production env file
-env.production
+.env.production
 
 # Log files
 npm-debug.log*
