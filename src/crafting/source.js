@@ -44,6 +44,8 @@ export function getSource(object) {
         source.text = getSourceGatheringText(GatheringSkillType.MINING, object.level)
     else if (object.type.name === ItemType.FISH)
         source.text = getSourceGatheringText(GatheringSkillType.FISHING, object.level)
+    else if (object.type.name === ItemType.HARVEST)
+        source.text = `Gardening (${object.level})`
     else if (object.name.endsWith('Pelt'))
         source.text = `Ranching: Boars (${getSourceLevelRangeRanchingText(object.level)}), Beasts (${getSourceLevelRangeText(object.level)})`
     else if (object.type.name.endsWith(ItemType.TOOL)) {
