@@ -110,3 +110,9 @@ Useful commands on the server:
 When a change is made, to update the server:
 
     ./bin/update.sh
+
+Server Maintenance:
+    
+    # Every now and again you'll need to update the npm packages to remove security vulnerabilities
+    npm audit
+    npm audit fix   # may require sudo access, depending on the fix
