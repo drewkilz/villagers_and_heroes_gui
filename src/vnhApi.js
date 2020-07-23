@@ -96,3 +96,24 @@ export function initializeApi() {
         SALVAGE_KIT = data
     })
 }
+
+export function upload(formData) {
+    return Vue.prototype.axiosVnhApi.post(`village/upload/`, formData)
+        .then(response => {
+            return response.data
+        })
+        .catch(() => {
+            return []
+        })
+}
+
+export function status(url) {
+    let shortened_url = url.replace(Vue.prototype.axiosVnhApi.defaults.baseURL, '')
+    return Vue.prototype.axiosVnhApi.get(shortened_url)
+        .then(response => {
+            return response
+        })
+        .catch(() => {
+            return []
+        })
+}
