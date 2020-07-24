@@ -260,14 +260,17 @@
                     // Calculate the number of items based on skill
                     let numberOfCraftedItems = Math.ceil(totalTimeInMinutes * 60 / this.getSecondsPerCraft(item.skill))
 
-                    // Add in items based on motes
-                    let motes = this.options.motes
+                    if (this.options.crystals > 0)
+                    {
+                        // Add in items based on motes
+                        let motes = this.options.motes
 
-                    // Add more motes based on reduction
-                    motes *= (1 + ((this.options.moteReduction / 100) / 2))
+                        // Add more motes based on reduction
+                        motes *= (1 + ((this.options.moteReduction / 100) / 2))
 
-                    // Each mote makes one more item
-                    numberOfCraftedItems += motes
+                        // Each mote makes one more item
+                        numberOfCraftedItems += motes
+                    }
 
                     // Lastly, add the overage
                     numberOfCraftedItems *= (1 + (this.options.overage / 100))
