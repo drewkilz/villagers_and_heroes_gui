@@ -90,10 +90,6 @@
                 this.craftingList.remove(object.object)
                 this.$refs.navBar.updateCraftingListCount()
             }
-        },
-        mounted() {
-            // TODO: Remove when done debugging
-            this.switchContent('upload')
         }
     }
 </script>
