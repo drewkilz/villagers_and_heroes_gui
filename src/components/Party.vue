@@ -114,7 +114,28 @@
                                 title="Motes of Yorick allow you to craft faster."
                                 :debounce="debounce"
                                 type="number" number min="0" step="1"
-                                size="sm"></b-input>
+                                size="sm"
+                                :key="forceUpdateMotes"></b-input>
+                        </b-form>
+                    </b-col>
+                    <div class="w-100"></div>
+                    <b-col cols="2" class="align-middle">
+                        <label for="form-mass-craft">
+                            Mass Craft Amount
+                        </label>
+                    </b-col>
+                    <b-col md="auto">
+                        <b-form class="my-1" inline @submit.prevent>
+                            <b-input
+                                    id="form-mass-craft"
+                                    class="mb-2 mr-sm-2 mb-sm-0 ml-2"
+                                    v-model="massCraft"
+                                    v-b-tooltip.hover
+                                    title="Mass crafting using Motes of Yorick allows you to craft faster. For example, enter 3 if you are crafting 3 items at a time."
+                                    :debounce="debounce"
+                                    type="number" number min="0" step="1" :max="massCraftMax"
+                                    size="sm"
+                                    :key="forceUpdateMassCraft"></b-input>
                         </b-form>
                     </b-col>
                     <div class="w-100"></div>
@@ -220,7 +241,8 @@
                     villagerInsight: false,
                     motes: 0,
                     moteReduction: 0,
-                    overage: 0
+                    overage: 0,
+                    massCraft: 0
                 },
                 fields: [
                     {key: 'skill', sortable: true, formatter: 'getSkill', sortByFormatted: true},
@@ -247,7 +269,33 @@
                 tailoryOptions: [],
                 kitchenOptions: [],
                 show: true,
-                defaultSecondsPerCraft: 3.0
+                defaultSecondsPerCraft: 3.0,
+                forceUpdateMotes: 0,
+                forceUpdateMassCraft: 0
+            }
+        },
+        computed: {
+            massCraft: {
+                get: function () {
+                    return this.options.massCraft
+                },
+                set: function (value) {
+                    if (value > this.options.motes) {
+                        // Don't set the value if set to higher than the number of Motes of Yorick available - reset to
+                        //  previously set value
+                        this.massCraft = this.options.motes
+
+                        // Force an update as the GUI does not update
+                        this.forceUpdateMassCraft += 1
+
+                        return
+                    }
+
+                    this.options.massCraft = value
+                }
+            },
+            massCraftMax() {
+                return this.options.motes > 50 ? 50 : this.options.motes
             }
         },
         methods: {
@@ -265,18 +313,37 @@
                         // Add in items based on motes
                         let motes = this.options.motes
 
-                        // Add more motes based on reduction
-                        motes *= (1 + ((this.options.moteReduction / 100) / 2))
+                        if (this.options.massCraft > 1) {
+                            // Only add more items if mass craft is set to more than 1
 
-                        // Each mote makes one more item
-                        numberOfCraftedItems += motes
+                            // Calculate the number of mass crafts than can be done
+                            let massCrafts = Math.floor(motes / this.options.massCraft)
+
+                            // Add more motes based on reduction: for each mass craft, you can get the number of motes
+                            // used / 2, rounded up, so:
+                            //  mass craft  motes   returned
+                            //  ----------  -----   --------
+                            //      1         0        0
+                            //      2         2        1
+                            //      3         3        2
+                            //      4         4        2
+                            //      5         5        3
+                            //     etc.
+                            motes += massCrafts * (Math.ceil(this.options.massCraft / 2) * (this.options.moteReduction / 100))
+
+                            // Recalculate the number of mass crafts that can be done based on the returned motes
+                            massCrafts = Math.floor(motes / this.options.massCraft)
+
+                            // Calculate the additional number of crafted items that could be made
+                            numberOfCraftedItems = numberOfCraftedItems - massCrafts + massCrafts * this.options.massCraft
+                        }
                     }
 
                     // Lastly, add the overage
                     numberOfCraftedItems *= (1 + (this.options.overage / 100))
 
                     // Round to next integer
-                    numberOfCraftedItems = Math.ceil(numberOfCraftedItems)
+                    numberOfCraftedItems = Math.floor(numberOfCraftedItems)
 
                     // Double the number of items as each crafted item takes two components
                     numberOfCraftedItems *= 2
@@ -379,7 +446,26 @@
             'options.village.tailory'() { this.calculate() },
             'options.village.kitchen'() { this.calculate() },
             'options.villagerInsight'() { this.calculate() },
-            'options.motes'() { this.calculate() },
+            'options.motes'(newVal, oldVal) {
+                if (newVal === 1) {
+                    // minimum of 2 as 1 mote cannot be used, or set to zero if decrementing from 2 by 1
+                    this.options.motes = oldVal === 2 ? 0 : 2
+
+                    // Force an update as if you decrement from 2 to 1, it will save motes as 2, but not update the
+                    //  GUI to 2
+                    this.forceUpdateMotes += 1
+                }
+                else {
+                    this.options.motes = newVal
+                }
+
+                if (newVal < this.options.massCraft) {
+                    this.options.massCraft = newVal
+                }
+
+                this.calculate()
+            },
+            'options.massCraft'() { this.calculate() },
             'options.moteReduction'() { this.calculate() },
             'options.overage'() { this.calculate() },
         },
