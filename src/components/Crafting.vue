@@ -83,6 +83,25 @@
                             </b-col>
                         </b-row>
                     </template>
+                    <b-row class="text-left">
+                        <b-col cols="3">
+                            <label for="form-crafting-cost-reduction">Crafting Cost Reduction</label>
+                        </b-col>
+                        <b-col md="auto">
+                            <b-input
+                                    id="form-crafting-cost-reduction"
+                                    class="mb-2 mr-sm-2 mb-sm-0 ml-2"
+                                    v-model="craftingList.options.craftingCostReduction"
+                                    v-b-tooltip.hover
+                                    title="The percentage at which crafting recipes cost less gold."
+                                    :debounce="debounce"
+                                    type="number" number min="0" max="100" step="1"
+                                    size="sm"></b-input>
+                        </b-col>
+                        <b-col md="auto">
+                            %
+                        </b-col>
+                    </b-row>
                 </b-form>
             </div>
             <div v-if="isBusy">
@@ -121,12 +140,13 @@
                     <tbody v-show="show['components']" v-for="(item, index) in sortBySourceAndLevel(craftingList.components)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
+                    <!-- TODO: When making items, reduce number of salvage kits required as well - it is currently static -->
                     <!-- TODO: When updating obtained quantities with salvaging checked, it does some funky stuff - need to add in salvaging to the quantities somehow or do something -->
                     <CraftingHeaderRow value="Final Products" name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
                     <tbody v-show="show['final']" v-for="(item, index) in sortBySourceAndLevel(craftingList.list)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
-                    <CraftingHeaderRow :value='getTotalCost(craftingList.cost)'></CraftingHeaderRow>
+                    <CraftingHeaderRow :value='cost'></CraftingHeaderRow>
                 </b-table-simple>
             </div>
         </div>
@@ -138,7 +158,8 @@
     import CraftingItemRow from '@/components/CraftingItemRow'
     import { CraftingList } from '@/crafting/list'
     import { getSource } from '@/crafting/source'
-    import { compareValues } from '@/utility';
+    import { compareValues } from '@/utility'
+    import { Cost } from '@/models/cost'
 
     export default {
         name: 'Crafting',
@@ -172,7 +193,8 @@
                     refined: true,
                     components: true,
                     final: true
-                }
+                },
+                cost: ''
             }
         },
         methods: {
@@ -196,11 +218,15 @@
                         this.craftingQuantities.push(object.obtainedQuantity)
                     }
 
+                    this.getTotalCost()
                     this.isBusy = false
                 })
             },
-            getTotalCost(cost) {
-                return `Cost: ${cost}`
+            getTotalCost() {
+                let cost = this.craftingList.cost
+                if (this.craftingList.options.craftingCostReduction > 0)
+                    cost = new Cost(this.craftingList.cost.total * (100 - this.craftingList.options.craftingCostReduction) / 100)
+                this.cost = `Cost: ${cost}`
             },
             showHide(name) {
                 this.show[name] = !this.show[name]
@@ -281,7 +307,10 @@
             },
             'craftingList.options.componentSalvagePercent'() {
                 this.calculateList()
-            }
+            },
+            'craftingList.options.craftingCostReduction'() {
+                this.getTotalCost()
+            },
         }
     }
 </script>
