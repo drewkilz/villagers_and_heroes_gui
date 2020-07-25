@@ -431,17 +431,17 @@
                 }
                 else if (skill === CraftingSkill.SMITHING) {
                     secondsPerCraftModifier = this.options.village.smithy
-                    if (this.options.tools.cooking)
+                    if (this.options.tools.smithing)
                         secondsPerCraftModifier -= (20 / 100)
                 }
                 else if (skill === CraftingSkill.TAILORING) {
                     secondsPerCraftModifier = this.options.village.tailory
-                    if (this.options.tools.cooking)
+                    if (this.options.tools.tailoring)
                         secondsPerCraftModifier -= (20 / 100)
                 }
                 else if (skill === CraftingSkill.WOODCRAFTING) {
                     secondsPerCraftModifier = this.options.village.woodshop
-                    if (this.options.tools.cooking)
+                    if (this.options.tools.woodcrafting)
                         secondsPerCraftModifier -= (20 / 100)
                 }
 
