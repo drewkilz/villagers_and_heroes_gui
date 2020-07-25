@@ -305,8 +305,10 @@
                 for (let index in this.items) {
                     let item = this.items[index]
 
-                    // Calculate the number of items based on skill
-                    let numberOfCraftedItems = Math.ceil(totalTimeInMinutes * 60 / this.getSecondsPerCraft(item.skill))
+                    // Calculate the number of crafts based on skill
+                    let numberOfCrafts = Math.ceil(totalTimeInMinutes * 60 / this.getSecondsPerCraft(item.skill))
+
+                    let numberOfCraftedItems = numberOfCrafts
 
                     if (this.options.crystals > 0)
                     {
@@ -333,6 +335,10 @@
 
                             // Recalculate the number of mass crafts that can be done based on the returned motes
                             massCrafts = Math.floor(motes / this.options.massCraft)
+
+                            // Limit the number of mass crafts that can actually be done in the time given
+                            if (massCrafts > numberOfCrafts)
+                                massCrafts = numberOfCrafts
 
                             // Calculate the additional number of crafted items that could be made
                             numberOfCraftedItems = numberOfCraftedItems - massCrafts + massCrafts * this.options.massCraft
