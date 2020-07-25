@@ -7,5 +7,7 @@ export class CraftingOptions {
 
         // Default to 20% of Crafting Components being returned during salvaging
         this.componentSalvagePercent = componentSalvagePercent
+
+        this.craftingCostReduction = 0
     }
 }
