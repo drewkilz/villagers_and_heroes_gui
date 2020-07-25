@@ -1,22 +1,22 @@
 <template>
     <div>
         <b-navbar toggleable="lg" type="dark" variant="dark">
-            <b-navbar-brand href="#" v-on:click="switchContent('home')">{{ title }}</b-navbar-brand>
+            <b-navbar-brand to="/">{{ title }}</b-navbar-brand>
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                    <b-nav-item href="#" v-on:click="switchContent('crafting')">Crafting</b-nav-item>
-                    <b-nav-item href="#" v-on:click="switchContent('recipes')">Recipes</b-nav-item>
-                    <!--<b-nav-item href="#" v-on:click="switchContent('equipment')">Equipment</b-nav-item>-->
-                    <b-nav-item href="#" v-on:click="switchContent('party')">Crafting Party</b-nav-item>
-                    <!--<b-nav-item href="#" v-on:click="switchContent('village')">Village</b-nav-item>-->
-                    <!--<b-nav-item href="#" v-on:click="switchContent('upload')">Upload</b-nav-item>-->
+                    <b-nav-item to="/crafting">Crafting</b-nav-item>
+                    <b-nav-item to="/recipes">Recipes</b-nav-item>
+                    <!--<b-nav-item to="/equipment">Equipment</b-nav-item>-->
+                    <b-nav-item to="/party">Crafting Party</b-nav-item>
+                    <!--<b-nav-item to="/village">Village</b-nav-item>-->
+                    <!--<b-nav-item to="/upload">Upload</b-nav-item>-->
                 </b-navbar-nav>
             </b-collapse>
             <b-navbar-nav class="ml-auto">
-                <b-nav-item right id="crafting-list-icon">
+                <b-nav-item to="/crafting/list" right id="crafting-list-icon">
                     <span v-if="craftingListCount" :key="craftingListCount">({{ craftingListCount }}) </span>
-                    <b-icon-cart v-on:click="switchContent('craftingList')"></b-icon-cart>
+                    <b-icon-cart></b-icon-cart>
                 </b-nav-item>
                 <b-popover
                         target="crafting-list-icon"
@@ -35,8 +35,8 @@
                             <p>No recipes selected.</p>
                             <p>
                                 You can select the recipes and quantities to craft in the
-                                <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or -->
-                                <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
+                                <!--TODO: <b-link to="/equipment">Equipment</b-link> or -->
+                                <b-link to="/recipes">Recipes</b-link> tool.
                             </p>
                         </template>
                         <template v-slot:cell(name)="data">
@@ -100,9 +100,6 @@
                 items.sort(compareValues('object.name'))
 
                 return items
-            },
-            switchContent(content) {
-                return this.$emit('switch-content', content)
             },
             updateCraftingListCount() {
                 this.craftingListCount = this.craftingList.count

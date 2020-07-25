@@ -4,8 +4,8 @@
             <p>No recipes selected.</p>
             <p>
                 You can select the recipes and quantities to craft in the
-                <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or-->
-                <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
+                <!--TODO: <b-link to="/equipment">Equipment</b-link> or-->
+                <b-link to="/recipes">Recipes</b-link> tool.
             </p>
         </div>
         <div v-else>
@@ -18,8 +18,8 @@
                     </li>
                     <li>
                         To add new recipes, you can do so in the
-                        <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or-->
-                        <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool
+                        <!--TODO: <b-link to="/equipment">Equipment</b-link> or-->
+                        <b-link to="/recipes">Recipes</b-link> tool
                     </li>
                 </ul>
             </div>
@@ -247,9 +247,6 @@
                     sortedList.push(sortingList[index].craftingObject)
 
                 return sortedList
-            },
-            switchContent(content) {
-                return this.$emit('switch-content', content)
             },
             valueChange(object, difference, child = false) {
                 if (child) {

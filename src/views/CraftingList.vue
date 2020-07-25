@@ -4,8 +4,8 @@
             <p>No recipes selected.</p>
             <p>
                 You can select the recipes and quantities to craft in the
-                <!--TODO: <b-link href="#" v-on:click="switchContent('equipment')">Equipment</b-link> or -->
-                <b-link href="#" v-on:click="switchContent('recipes')">Recipes</b-link> tool.
+                <!--TODO: <b-link to="/equipment">Equipment</b-link> or -->
+                <b-link to="/recipes">Recipes</b-link> tool.
             </p>
         </div>
         <div v-else>
@@ -32,7 +32,7 @@
                 <template v-slot:table-caption>
                     {{ craftingList.count }} recipes found.
                     <div class="float-right">
-                        <b-button size="sm" @click="switchContent('crafting')" class="mr-2">Craft All</b-button>
+                        <b-button size="sm" to="/crafting" class="mr-2">Craft All</b-button>
                         <b-button size="sm" @click="clearCraftingList()">Delete All</b-button>
                     </div>
                 </template>
@@ -92,9 +92,6 @@
                     this.items.splice(index, 1)
                     this.$emit('remove-from-crafting-list', object)
                 }
-            },
-            switchContent(content) {
-                return this.$emit('switch-content', content)
             }
         },
         mounted() {
