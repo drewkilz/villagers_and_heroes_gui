@@ -19,6 +19,7 @@
 </template>
 
 <script>
+    import Contact from '@/components/Contact'
     import Crafting from '@/components/Crafting'
     import CraftingList from '@/components/CraftingList'
     import Credits from '@/components/Credits'
@@ -43,7 +44,8 @@
             Credits,
             CraftingList,
             Party,
-            VillageUpload
+            VillageUpload,
+            Contact
         },
         data() {
             return {
@@ -62,7 +64,8 @@
                     upload: {component: 'VillageUpload', title: 'Village Image Uploader'},
                     party: {component: 'Party', title: 'Crafting Party'},
                     notFound: {component: 'NotFound', title: '404 :: Not Found'},
-                    credits: {component: 'Credits'}
+                    credits: {component: 'Credits'},
+                    contact: {component: 'Contact'}
                 },
                 craftingList: new _CraftingList()
             }
