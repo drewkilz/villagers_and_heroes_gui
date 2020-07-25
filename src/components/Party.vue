@@ -35,54 +35,101 @@
                             type="number" number min="1" max="100" step="1"
                             size="sm"></b-input>
                 </b-form>
-                <p class="mt-1 mb-0"><b-link :href="getWikiLink('Village_Projects#Crafting_Stations')"
-                           target="_blank"
-                           rel="noopener">Village Crafting Projects</b-link></p>
-                <b-row>
-                    <b-col cols="1"><label for="form-kitchen">Kitchen</label></b-col>
-                    <b-col md="auto">
-                        <b-form-select
-                                id="form-kitchen"
-                                v-model="options.village.kitchen"
-                                :options="kitchenOptions"
-                                size="sm"
-                                style="width: 312px">
-                        </b-form-select>
-                    </b-col>
-                    <div class="w-100"></div>
-                    <b-col cols="1"><label for="form-smithy">Smithy</label></b-col>
-                    <b-col md="auto">
-                        <b-form-select
-                                id="form-smithy"
-                                v-model="options.village.smithy"
-                                :options="smithyOptions"
-                                size="sm"
-                                style="width: 312px">
-                        </b-form-select>
-                    </b-col>
-                    <div class="w-100"></div>
-                    <b-col cols="1"><label for="form-tailory">Tailory</label></b-col>
-                    <b-col md="auto">
-                        <b-form-select
-                                id="form-tailory"
-                                v-model="options.village.tailory"
-                                :options="tailoryOptions"
-                                size="sm"
-                                style="width: 312px">
-                        </b-form-select>
-                    </b-col>
-                    <div class="w-100"></div>
-                    <b-col cols="1"><label for="form-woodshop">Woodshop</label></b-col>
-                    <b-col md="auto">
-                        <b-form-select
-                                id="form-woodshop"
-                                v-model="options.village.woodshop"
-                                :options="woodshopOptions"
-                                size="sm"
-                                style="width: 312px">
-                        </b-form-select>
-                    </b-col>
-                </b-row>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="mt-1 mb-0">
+                            <b-link :href="getWikiLink('Village_Projects#Crafting_Stations')"
+                                    target="_blank"
+                                    rel="noopener">Village Crafting Projects</b-link></p>
+                        <div class="row">
+                            <div class="col-sm-2"><label for="form-kitchen">Kitchen</label></div>
+                            <div class="col-sm-10">
+                                <b-form-select
+                                        id="form-kitchen"
+                                        v-model="options.village.kitchen"
+                                        :options="kitchenOptions"
+                                        size="sm"
+                                        style="width: 312px">
+                                </b-form-select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2"><label for="form-smithy">Smithy</label></div>
+                            <div class="col-sm-10">
+                                <b-form-select
+                                        id="form-smithy"
+                                        v-model="options.village.smithy"
+                                        :options="smithyOptions"
+                                        size="sm"
+                                        style="width: 312px">
+                                </b-form-select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2"><label for="form-tailory">Tailory</label></div>
+                            <div class="col-sm-10">
+                                <b-form-select
+                                        id="form-tailory"
+                                        v-model="options.village.tailory"
+                                        :options="tailoryOptions"
+                                        size="sm"
+                                        style="width: 312px">
+                                </b-form-select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2"><label for="form-woodshop">Woodshop</label></div>
+                            <div class="col-sm-10">
+                                <b-form-select
+                                        id="form-woodshop"
+                                        v-model="options.village.woodshop"
+                                        :options="woodshopOptions"
+                                        size="sm"
+                                        style="width: 312px">
+                                </b-form-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        Premium Tools (20% Faster)
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b-form-checkbox
+                                        class="mb-2 mr-sm-2 mb-sm-0"
+                                        v-model="options.tools.cooking">
+                                    Forever Spoon (Cooking)
+                                </b-form-checkbox>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b-form-checkbox
+                                        class="mb-2 mr-sm-2 mb-sm-0"
+                                        v-model="options.tools.smithing">
+                                    Crackling Hammer (Smithing)
+                                </b-form-checkbox>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b-form-checkbox
+                                        class="mb-2 mr-sm-2 mb-sm-0"
+                                        v-model="options.tools.tailoring">
+                                    Spool of the Depths (Tailoring)
+                                </b-form-checkbox>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b-form-checkbox
+                                        class="mb-2 mr-sm-2 mb-sm-0"
+                                        v-model="options.tools.woodcrafting">
+                                    Molten Chisel (Woodcrafting)
+                                </b-form-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <b-form class="my-1" inline>
                     <b-form-checkbox
                             id="form-villager-insight"
@@ -238,6 +285,12 @@
                         tailory: 1.0,
                         kitchen: 1.0
                     },
+                    tools: {
+                        smithing: false,
+                        woodcrafting: false,
+                        tailoring: false,
+                        cooking: false
+                    },
                     villagerInsight: false,
                     motes: 0,
                     moteReduction: 0,
@@ -371,14 +424,26 @@
             getSecondsPerCraft(skill) {
                 let secondsPerCraftModifier = 1.0
 
-                if (skill === CraftingSkill.COOKING)
+                if (skill === CraftingSkill.COOKING) {
                     secondsPerCraftModifier = this.options.village.kitchen
-                else if (skill === CraftingSkill.SMITHING)
+                    if (this.options.tools.cooking)
+                        secondsPerCraftModifier -= (20 / 100)
+                }
+                else if (skill === CraftingSkill.SMITHING) {
                     secondsPerCraftModifier = this.options.village.smithy
-                else if (skill === CraftingSkill.TAILORING)
+                    if (this.options.tools.cooking)
+                        secondsPerCraftModifier -= (20 / 100)
+                }
+                else if (skill === CraftingSkill.TAILORING) {
                     secondsPerCraftModifier = this.options.village.tailory
-                else if (skill === CraftingSkill.WOODCRAFTING)
+                    if (this.options.tools.cooking)
+                        secondsPerCraftModifier -= (20 / 100)
+                }
+                else if (skill === CraftingSkill.WOODCRAFTING) {
                     secondsPerCraftModifier = this.options.village.woodshop
+                    if (this.options.tools.cooking)
+                        secondsPerCraftModifier -= (20 / 100)
+                }
 
                 let reduction = this.options.villagerInsight ? 0.5 : 0.0
 
@@ -451,6 +516,10 @@
             'options.village.woodshop'() { this.calculate() },
             'options.village.tailory'() { this.calculate() },
             'options.village.kitchen'() { this.calculate() },
+            'options.tools.smithing'() { this.calculate() },
+            'options.tools.woodcrafting'() { this.calculate() },
+            'options.tools.tailoring'() { this.calculate() },
+            'options.tools.cooking'() { this.calculate() },
             'options.villagerInsight'() { this.calculate() },
             'options.motes'(newVal, oldVal) {
                 if (newVal === 1) {
