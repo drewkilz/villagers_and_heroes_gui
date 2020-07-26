@@ -53,7 +53,8 @@
             </div>
         </form>
         <div id="results" v-if="results">
-            <p><span class="font-weight-bold">Results:</span> {{ results }}</p>
+            <p><span class="font-weight-bold">Results:</span></p>
+            <div v-html="results"></div>
         </div>
         <div id="examples">
             <p>Example Images:</p>
@@ -136,8 +137,37 @@
                                 setTimeout(() => this.saveStatus(location, target), retry * 1000)
                             }
                             else if (response.status === 200) {
-                                // TODO: Undefined roster entries
-                                this.results = `Uploaded ${response.data.images.length} file(s) successfully for village: '${response.data.village}' (${response.data.server}) with ${response.data.roster.count} roster entries in ${response.data.processing_time} seconds.`
+                                this.results = `<p>Uploaded ${target.files.length} file(s) successfully for village: '${response.data.village}' (${response.data.server}) in ${response.data.processing_time} seconds.</p>`
+                                if (response.data.roster.length !== 0) {
+                                    this.results += `
+<h3>Processed Roster Details</h3>
+<div>${response.data.roster.length} roster snapshot(s) found.</div>`
+
+                                    for (let index in response.data.roster) {
+                                        let snapshot = response.data.roster[index]
+                                        this.results += `
+<h4>Snapshot ${parseInt(index) + 1}</h4>
+<h5>Images</h5>
+<ul>`
+                                        for (let image_index in snapshot.original_images) {
+                                            let image = snapshot.original_images[image_index]
+                                            let timestamp = snapshot.timestamps[image_index]
+                                            this.results += `<li>${image} @ ${new Date(timestamp)}</li>`
+                                        }
+
+                                        this.results += `
+</ul>
+<h5>Entries</h5>
+<ul>`
+
+                                        for (let entry_key in snapshot.entries) {
+                                            let entry = snapshot.entries[entry_key]
+                                            this.results += `<li><pre>${entry.rank.custom_name.padEnd(25)}${entry.name.padEnd(25)}${entry.level}</pre></li>`
+                                        }
+
+                                        this.results += '</ul>'
+                                    }
+                                }
                                 this.currentStatus = STATUS_INITIAL
                                 this.elapsedTime = 0
                                 this.startTime = null
