@@ -42,7 +42,7 @@
 <script>
     import RecipeName from '@/components/RecipeName'
     import { CraftingObject } from '@/crafting/object'
-    import { CraftingType } from '@/models/type'
+    import { CraftingType, SkillType } from '@/models/type'
     import { getWikiLink } from '@/utility'
     import { CraftingList } from '@/crafting/list'
 
@@ -130,24 +130,32 @@
                 if (recipe.type.name === CraftingType.DRAM) {
                     if (recipe.name.endsWith('Armor'))
                         note = 'Increases Armor by X'
-                    if (recipe.name.endsWith('Clarity'))
+                    else if (recipe.name.endsWith('Clarity'))
                         note = 'Increases Clarity by X'
-                    if (recipe.name.endsWith('Expertise'))
+                    else if (recipe.name.endsWith('Expertise'))
                         note = 'Increases Expertise by X'
-                    if (recipe.name.endsWith('Haste'))
+                    else if (recipe.name.endsWith('Haste'))
                         note = 'Increases Haste by X'
-                    if (recipe.name.endsWith('Healing'))
+                    else if (recipe.name.endsWith('Healing'))
                         note = 'All healing done to you is increased by X'
-                    if (recipe.name.endsWith('Liberty'))
+                    else if (recipe.name.endsWith('Liberty'))
                         note = 'Reduces the duration of most stuns, snares, and slows by 80%'
-                    if (recipe.name.endsWith('Magic'))
+                    else if (recipe.name.endsWith('Magic'))
                         note = 'Increases Magic Resist by X'
-                    if (recipe.name.endsWith('Malice'))
+                    else if (recipe.name.endsWith('Malice'))
                         note = 'Increases Savagery and Brutality by X'
-                    if (recipe.name.endsWith('Mastery'))
+                    else if (recipe.name.endsWith('Mastery'))
                         note = 'Increases Masteries by X'
-                    if (recipe.name.endsWith('Treasure'))
+                    else if (recipe.name.endsWith('Treasure'))
                         note = 'Increases Magic Find by X'
+                }
+                else if (recipe.type.name === CraftingType.NECKLACE) {
+                    if (recipe.skill.name === SkillType.SMITHING)
+                        note = 'Crafting costs are reduced by X%'
+                    else if (recipe.skill.name === SkillType.TAILORING)
+                        note = 'You have a X% increased chance at finding a Mote of Yorick while gathering. Additionally, your chance to find supplies is boosted by Y%.'
+                    else if (recipe.skill.name === SkillType.WOODCRAFTING)
+                        note = 'While rapid crafting using Motes of Yorick, you have a X% chance to recover half of the motes spent'
                 }
 
                 if (note === null)
