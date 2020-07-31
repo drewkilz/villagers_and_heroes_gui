@@ -5,6 +5,8 @@ import { SALVAGE_KIT_NAME, Item } from '@/models/item'
 import { Recipe } from '@/models/recipe'
 import { Type } from '@/models/type'
 
+let qs = require('qs');
+
 export let SALVAGE_KIT = null
 
 export function getCategory(name) {
@@ -116,4 +118,45 @@ export function status(url) {
         .catch(() => {
             return []
         })
+}
+
+export function getEquipment(options) {
+    let params = {
+        level: options.level,
+        numLevels: options.numLevels
+    }
+
+    if (options.heroClasses.length === 0 && options.heroSubClasses.length === 0 && options.villagerClasses.length === 0)
+        // No data to fetch without a class specified
+        return null
+
+    if (options.heroClasses.length !== 0)
+        params.heroClass = options.heroClasses
+
+    if (options.heroSubClasses.length !== 0)
+        params.heroSubClass = options.heroSubClasses
+
+    if (options.villagerClasses.length !== 0)
+        params.villagerClass = options.villagerClasses
+
+    return Vue.prototype.axiosVnhApi.get('equipment/', {
+        params: params,
+        paramsSerializer: function(params) {
+            return qs.stringify(params, {indices: false})
+        }
+    }).then(response => {
+        let data = {}
+
+        for (const group in response.data) {
+            data[group] = []
+            for (const recipe of response.data[group]) {
+                data[group].push(Recipe.fromJson(recipe))
+            }
+        }
+
+        return data
+    })
+    .catch(() => {
+        return null
+    })
 }

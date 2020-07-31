@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <span>
         <b-link :id="getRowItemId(index, 'name-link')"
                 :href="getWikiLink(recipe.name)"
                 target="_blank"
@@ -11,6 +11,8 @@
                 placement="bottomright"
                 triggers="hover">
             <template v-slot:title>{{ recipe.name }}</template>
+            <div v-if="preface" v-html="preface"></div>
+            <div><u>Ingredients</u></div>
             <ul>
                 <li v-for="ingredient in recipe.ingredients" :key="ingredient.id">
                     {{ ingredient.quantity }}
@@ -19,7 +21,7 @@
                 <li v-if="recipe.cost.total > 0">{{recipe.cost }}</li>
             </ul>
         </b-popover>
-    </div>
+    </span>
 </template>
 
 <script>
@@ -36,6 +38,10 @@
             index: {
                 type: Number,
                 required: true
+            },
+            preface: {
+                type: String,
+                required: false
             }
         },
         methods: {

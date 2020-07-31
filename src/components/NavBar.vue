@@ -7,7 +7,7 @@
                 <b-navbar-nav>
                     <b-nav-item to="/crafting">Crafting</b-nav-item>
                     <b-nav-item to="/recipes">Recipes</b-nav-item>
-                    <!--<b-nav-item to="/equipment">Equipment</b-nav-item>-->
+                    <b-nav-item to="/equipment">Equipment</b-nav-item>
                     <b-nav-item to="/party">Crafting Party</b-nav-item>
                     <!--<b-nav-item to="/village">Village</b-nav-item>-->
                     <!--<b-nav-item to="/upload">Upload</b-nav-item>-->
@@ -35,7 +35,7 @@
                             <p>No recipes selected.</p>
                             <p>
                                 You can select the recipes and quantities to craft in the
-                                <!--TODO: <b-link to="/equipment">Equipment</b-link> or -->
+                                <b-link to="/equipment">Equipment</b-link> or
                                 <b-link to="/recipes">Recipes</b-link> tool.
                             </p>
                         </template>

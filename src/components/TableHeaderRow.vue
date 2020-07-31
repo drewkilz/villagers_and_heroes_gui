@@ -14,7 +14,7 @@
 
 <script>
     export default {
-        name: 'CraftingHeaderRow',
+        name: 'TableHeaderRow',
         props: {
             value: {
                 type: String,

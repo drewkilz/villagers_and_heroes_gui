@@ -31,12 +31,11 @@ const routes = [
         name: 'Credits',
         component: () => import(/* webpackChunkName: 'about' */ './views/Credits')
     },
-    // {
-    //     // TODO: As part of the equipment, enable a way to select all for a series of levels? like 16-29, for example?
-    //     path: '/equipment',
-    //     name: 'Equipment',
-    //     component: () => import(/* webpackChunkName: 'about' */ './views/Equipment')
-    // },
+    {
+        path: '/equipment',
+        name: 'Equipment',
+        component: () => import(/* webpackChunkName: 'about' */ './views/Equipment')
+    },
     {
         path: '/party',
         name: 'Crafting Party',

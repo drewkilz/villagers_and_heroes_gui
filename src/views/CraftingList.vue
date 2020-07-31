@@ -4,7 +4,7 @@
             <p>No recipes selected.</p>
             <p>
                 You can select the recipes and quantities to craft in the
-                <!--TODO: <b-link to="/equipment">Equipment</b-link> or -->
+                <b-link to="/equipment">Equipment</b-link> or
                 <b-link to="/recipes">Recipes</b-link> tool.
             </p>
         </div>

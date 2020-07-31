@@ -4,7 +4,7 @@
             <p>No recipes selected.</p>
             <p>
                 You can select the recipes and quantities to craft in the
-                <!--TODO: <b-link to="/equipment">Equipment</b-link> or-->
+                <b-link to="/equipment">Equipment</b-link> or
                 <b-link to="/recipes">Recipes</b-link> tool.
             </p>
         </div>
@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         To add new recipes, you can do so in the
-                        <!--TODO: <b-link to="/equipment">Equipment</b-link> or-->
+                        <b-link to="/equipment">Equipment</b-link> or
                         <b-link to="/recipes">Recipes</b-link> tool
                     </li>
                 </ul>
@@ -128,25 +128,25 @@
                             <b-th>Source</b-th>
                         </b-tr>
                     </b-thead>
-                    <CraftingHeaderRow value="Items" name="items" :show="show['items']" @show-hide="showHide"></CraftingHeaderRow>
+                    <TableHeaderRow value="Items" name="items" :show="show['items']" @show-hide="showHide"></TableHeaderRow>
                     <tbody v-show="show['items']" v-for="(item, index) in sortBySourceAndLevel(craftingList.items)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
-                    <CraftingHeaderRow value="Refined Ingredients" name="refined" :show="show['refined']" @show-hide="showHide"></CraftingHeaderRow>
+                    <TableHeaderRow value="Refined Ingredients" name="refined" :show="show['refined']" @show-hide="showHide"></TableHeaderRow>
                     <tbody v-show="show['refined']" v-for="(item, index) in sortBySourceAndLevel(craftingList.refined)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
-                    <CraftingHeaderRow value="Crafting Components" name="components" :show="show['components']" @show-hide="showHide"></CraftingHeaderRow>
+                    <TableHeaderRow value="Crafting Components" name="components" :show="show['components']" @show-hide="showHide"></TableHeaderRow>
                     <tbody v-show="show['components']" v-for="(item, index) in sortBySourceAndLevel(craftingList.components)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
                     <!-- TODO: When making items, reduce number of salvage kits required as well - it is currently static -->
                     <!-- TODO: When updating obtained quantities with salvaging checked, it does some funky stuff - need to add in salvaging to the quantities somehow or do something -->
-                    <CraftingHeaderRow value="Final Products" name="final" :show="show['final']" @show-hide="showHide"></CraftingHeaderRow>
+                    <TableHeaderRow value="Final Products" name="final" :show="show['final']" @show-hide="showHide"></TableHeaderRow>
                     <tbody v-show="show['final']" v-for="(item, index) in sortBySourceAndLevel(craftingList.list)" :key="item.id">
                         <CraftingItemRow :object="item" :index="index" @value-change="valueChange"></CraftingItemRow>
                     </tbody>
-                    <CraftingHeaderRow :value='cost'></CraftingHeaderRow>
+                    <TableHeaderRow :value='cost'></TableHeaderRow>
                 </b-table-simple>
             </div>
         </div>
@@ -154,7 +154,7 @@
 </template>
 
 <script>
-    import CraftingHeaderRow from '@/components/CraftingHeaderRow'
+    import TableHeaderRow from '@/components/TableHeaderRow'
     import CraftingItemRow from '@/components/CraftingItemRow'
     import { CraftingList } from '@/crafting/list'
     import { getSource } from '@/crafting/source'
@@ -170,7 +170,7 @@
             }
         },
         components: {
-            CraftingHeaderRow,
+            TableHeaderRow,
             CraftingItemRow,
         },
         data() {
