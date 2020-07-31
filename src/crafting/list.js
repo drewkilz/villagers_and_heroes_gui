@@ -60,10 +60,8 @@ export class CraftingList {
 
                 if (subRecipe.type.name === CraftingType.REFINED)
                     currentDictionary = this.refined
-                else if (subRecipe.type.name === CraftingType.COMPONENT)
-                    currentDictionary = this.components
                 else
-                    throw `Invalid crafting type: "${subRecipe.type}" for a sub-recipe: "${subRecipe}"`
+                    currentDictionary = this.components
 
                 key = subRecipe.name
                 object = new CraftingObject(subRecipe, new CraftingQuantity(
