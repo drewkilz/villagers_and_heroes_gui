@@ -5,9 +5,9 @@
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                    <b-nav-item to="/crafting">Crafting</b-nav-item>
                     <b-nav-item to="/recipes">Recipes</b-nav-item>
                     <b-nav-item to="/equipment">Equipment</b-nav-item>
+                    <b-nav-item to="/crafting">Crafting</b-nav-item>
                     <b-nav-item to="/party">Crafting Party</b-nav-item>
                     <!--<b-nav-item to="/village">Village</b-nav-item>-->
                     <!--<b-nav-item to="/upload">Upload</b-nav-item>-->
