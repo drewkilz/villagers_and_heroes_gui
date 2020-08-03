@@ -211,7 +211,6 @@
                 let options = []
 
                 return getCategory(name).then(data => {
-                    console.log(data)
                     let types = data.types
                     for (let index in types) {
                         let type = types[index]
