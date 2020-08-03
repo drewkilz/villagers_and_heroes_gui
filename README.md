@@ -60,6 +60,7 @@ Original deployment was done via:
     # build the GUI
     sudo npm install npm@latest
     sudo npm install --save vue-router
+    sudo npm install vue-analytics  # Used for Google Analytics
     npm run build
     
     # Configure nginx to proxy requests - the API will already be setup so just need to add the section containing
