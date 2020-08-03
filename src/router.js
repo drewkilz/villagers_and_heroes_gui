@@ -60,6 +60,11 @@ const routes = [
         path: '*',
         name: '404 :: Not Found',
         component: NotFound
+    },
+    {
+        path: '/policies',
+        name: 'Policies',
+        component: () => import(/* webpackChunkName: 'policies' */ './views/Policies')
     }
 ]
 
