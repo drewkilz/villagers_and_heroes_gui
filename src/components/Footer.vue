@@ -3,7 +3,7 @@
         <footer class="footer footer-navbar-override">
             <div class="text-muted">
                 <b-row class="bg-dark">
-                    <b-col cols="12" md="10" class="text-left">
+                    <b-col cols="12" md="8" class="text-left">
                         <b-link href="https://villagersandheroes.com" target="_blank" rel="noopener">Villagers &
                             Heroes
                         </b-link>
@@ -11,7 +11,8 @@
                         a registered trademark of
                         <a href="https://www.madottergames.com" target="_blank" rel="noopener">Mad Otter Games</a>
                     </b-col>
-                    <b-col cols="6" md="2" class="text-right">
+                    <b-col cols="6" md="4" class="text-right">
+                        <router-link to="/policies">Policies</router-link> |
                         <router-link to="/contact">Contact</router-link> |
                         <router-link to="/credits">Credits</router-link>
                     </b-col>
