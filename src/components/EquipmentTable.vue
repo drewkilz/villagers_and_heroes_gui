@@ -31,40 +31,40 @@
             </b-thead>
             <TableHeaderRow value="Hero Equipment" name="heroEquipment" :show="show['heroEquipment']" @show-hide="setShowHide"></TableHeaderRow>
             <b-tbody v-show="show['heroEquipment']">
-                <EquipmentRow name="Armor" :recipes="recipes.heroEquipment.armor" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Weapon" :recipes="recipes.heroEquipment.weapon" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Shield" :recipes="recipes.heroEquipment.shield" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Belt" :recipes="recipes.heroEquipment.belt" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Glove" :recipes="recipes.heroEquipment.glove" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Boots" :recipes="recipes.heroEquipment.boots" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Headwear" :recipes="recipes.heroEquipment.headwear" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Trinket" description="x2" :recipes="recipes.heroEquipment.trinket" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Armor" :recipes="recipes.heroEquipment.armor" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Weapon" :recipes="recipes.heroEquipment.weapon" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Shield" :recipes="recipes.heroEquipment.shield" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Belt" :recipes="recipes.heroEquipment.belt" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Glove" :recipes="recipes.heroEquipment.glove" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Boots" :recipes="recipes.heroEquipment.boots" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Headwear" :recipes="recipes.heroEquipment.headwear" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Trinket" description="x2" :recipes="recipes.heroEquipment.trinket" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
             </b-tbody>
             <TableHeaderRow value="Preparations" name="preparations" :show="show['preparations']" @show-hide="setShowHide"></TableHeaderRow>
             <b-tbody v-show="show['preparations']">
-                <EquipmentRow name="Metal Powder" description="Weapon (Expertise)" :recipes="recipes.preparations.powder" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Mineral Oil" description="Headwear (Blasting)" :recipes="recipes.preparations.oil" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Cloth Embroidery" description="Armor (Armor)" :recipes="recipes.preparations.embroidery" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Leather Stitching" description="Belt (Poise)" :recipes="recipes.preparations.stitching" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Wood Resin" description="Glove (Savagery)" :recipes="recipes.preparations.resin" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Wood Pitch" description="Boots (Onslaught)" :recipes="recipes.preparations.pitch" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Metal Powder" description="Weapon (Expertise)" :recipes="recipes.preparations.powder" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Mineral Oil" description="Headwear (Blasting)" :recipes="recipes.preparations.oil" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Cloth Embroidery" description="Armor (Armor)" :recipes="recipes.preparations.embroidery" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Leather Stitching" description="Belt (Poise)" :recipes="recipes.preparations.stitching" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Wood Resin" description="Glove (Savagery)" :recipes="recipes.preparations.resin" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Wood Pitch" description="Boots (Onslaught)" :recipes="recipes.preparations.pitch" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
             </b-tbody>
             <TableHeaderRow value="Consumables" name="consumables" :show="show['consumables']" @show-hide="setShowHide"></TableHeaderRow>
             <b-tbody v-show="show['consumables']">
-                <EquipmentRow name="Mana Roll" description="Intellect & Will" duration="3600" :recipes="recipes.consumables.manaRoll" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Fish Dinner" description="Health" duration="3600" :recipes="recipes.consumables.fishDinner" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Breakfast" description="Armor, Magic Resist, Intellect, Will, Vitality & Vigor" duration="3600" :recipes="recipes.consumables.breakfast" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Pie" description="Experience" duration="7200" :recipes="recipes.consumables.pie" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Dram" description="Various" duration="3600" :recipes="recipes.consumables.dram" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Mana Potion" description="Restores Mana" duration="30" :recipes="recipes.consumables.manaPotion" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Health Potion" description="Restores Health" duration="30" :recipes="recipes.consumables.healthPotion" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Triad Potion" duration="1800" description="Crafting Cost Reduction, Supply Batch Boost, Abundant Harvest, Bountiful Gathering & Supply Find" :recipes="recipes.consumables.triadPotion" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Mana Roll" description="Intellect & Will" duration="3600" :recipes="recipes.consumables.manaRoll" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Fish Dinner" description="Health" duration="3600" :recipes="recipes.consumables.fishDinner" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Breakfast" description="Armor, Magic Resist, Intellect, Will, Vitality & Vigor" duration="3600" :recipes="recipes.consumables.breakfast" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Pie" description="Experience" duration="7200" :recipes="recipes.consumables.pie" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Dram" description="Various" duration="3600" :recipes="recipes.consumables.dram" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Mana Potion" description="Restores Mana" duration="30" :recipes="recipes.consumables.manaPotion" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Health Potion" description="Restores Health" duration="30" :recipes="recipes.consumables.healthPotion" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Triad Potion" duration="1800" description="Crafting Cost Reduction, Supply Batch Boost, Abundant Harvest, Bountiful Gathering & Supply Find" :recipes="recipes.consumables.triadPotion" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
             </b-tbody>
             <TableHeaderRow value="Villager Equipment" name="villagerEquipment" :show="show['villagerEquipment']" @show-hide="setShowHide"></TableHeaderRow>
             <b-tbody v-show="show['villagerEquipment']">
-                <EquipmentRow name="Crafting Tool" description="Experience" :recipes="recipes.villagerEquipment.tool" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Crafter's Necklace" description="Various" :recipes="recipes.villagerEquipment.necklace" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
-                <EquipmentRow name="Crafter's Special" description="Experience" :recipes="recipes.villagerEquipment.special" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Crafting Tool" description="Experience" :recipes="recipes.villagerEquipment.tool" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Crafter's Necklace" description="Various" :recipes="recipes.villagerEquipment.necklace" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
+                <EquipmentRow name="Crafter's Special" description="Experience" :recipes="recipes.villagerEquipment.special" :options="options" :craftingList="craftingList" @add-to-crafting-list="addToCraftingList"></EquipmentRow>
             </b-tbody>
         </b-table-simple>
     </div>
@@ -165,7 +165,7 @@
                 let recipesByLevel = Array.from(new Array(this.options.numLevels), () => [])
 
                 if (key in recipesDictionary) {
-                    for (const recipe of recipesDictionary[key]) {
+                    for (const recipe of recipesDictionary[key].recipes) {
                         if (nameSearches.length === 0)
                             recipesByLevel[recipe.level - this.options.level].push(recipe)
                         else {
@@ -173,6 +173,31 @@
                                 if (recipe.name.indexOf(nameSearch) !== -1)
                                     recipesByLevel[recipe.level - this.options.level].push(recipe)
                             }
+                        }
+                    }
+
+                    let currentRecipes = []
+                    if (nameSearches.length === 0)
+                        currentRecipes = recipesDictionary[key].previous
+                    else {
+                        for (const recipe of recipesDictionary[key].previous) {
+                            if (nameSearches.length > 0) {
+                                for (const nameSearch of nameSearches) {
+                                    if (recipe.name.indexOf(nameSearch) !== -1)
+                                        currentRecipes.push(recipe)
+                                }
+                            }
+                        }
+                    }
+
+                    for (const index in recipesByLevel) {
+                        if (recipesByLevel[index].length === 0) {
+                            for (const recipe of currentRecipes) {
+                                recipesByLevel[index].push(recipe)
+                            }
+                        }
+                        else {
+                            currentRecipes = recipesByLevel[index]
                         }
                     }
                 }

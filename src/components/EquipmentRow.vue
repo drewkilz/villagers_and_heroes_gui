@@ -13,7 +13,7 @@
             </div>
         </b-th>
         <b-td v-for="(recipesForLevel, index) in recipes" :key="index">
-            <div v-for="(recipe, recipeIndex) in recipesForLevel" :key="recipeIndex" style="border: thin solid; border-radius: 5px; margin-bottom: 5px; padding: 5px">
+            <div v-for="(recipe, recipeIndex) in recipesForLevel" :key="recipeIndex" :class="firstOccurrence(recipe, index) ? 'firstOccurrence' : 'notFirstOccurrence'" style="border-width: thin; border-radius: 5px; margin-bottom: 5px; padding: 5px">
                 <div>
                     <RecipeName :recipe="recipe" :index="getIndex(name, index, recipeIndex)" :preface="getPreface(recipe)"></RecipeName>
                     <b-img width="15" height="15" :src="getRarityIconSource(recipe.item.rarity)" right v-b-tooltip.hover
@@ -45,6 +45,7 @@
     import { CraftingType, SkillType } from '@/models/type'
     import { getWikiLink } from '@/utility'
     import { CraftingList } from '@/crafting/list'
+    import {EquipmentOptions} from '@/equipment/options'
 
     export default {
         name: 'EquipmentTable',
@@ -68,7 +69,11 @@
             craftingList: {
                 type: CraftingList,
                 required: true
-            }
+            },
+            options: {
+                type: EquipmentOptions,
+                required: true
+            },
         },
         components: {
             RecipeName
@@ -93,6 +98,9 @@
                     })
 
                 this.forceUpdateQuantity += 1
+            },
+            firstOccurrence(recipe, index) {
+                return recipe.level === index + this.options.level
             },
             formatDuration(seconds, full = true) {
                 let secondsAsInt = parseInt(seconds)
@@ -211,3 +219,15 @@
         }
     }
 </script>
+
+<style scoped>
+    .firstOccurrence {
+        border-color: black;
+        border-style: solid;
+    }
+
+    .notFirstOccurrence {
+        border-color: rgb(214, 216, 219);
+        border-style: dashed;
+    }
+</style>

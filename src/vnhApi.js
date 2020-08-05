@@ -148,9 +148,12 @@ export function getEquipment(options) {
         let data = {}
 
         for (const group in response.data) {
-            data[group] = []
-            for (const recipe of response.data[group]) {
-                data[group].push(Recipe.fromJson(recipe))
+            data[group] = {}
+            for (const key in response.data[group]) {
+                data[group][key] = []
+                for (const recipe of response.data[group][key]) {
+                    data[group][key].push(Recipe.fromJson(recipe))
+                }
             }
         }
 
