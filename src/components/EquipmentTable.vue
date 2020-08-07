@@ -25,8 +25,15 @@
                 v-else>
             <b-thead>
                 <b-tr>
-                    <b-th style="width: 16.66%"></b-th>
+                    <b-th></b-th>
                     <b-th v-for="level in levels" :key="level" class="text-center" style="width: 16.66%">{{ level }}</b-th>
+                    <b-th class="text-center">
+                        <b-link href="#" v-on:click="setLevel(options.level + options.numLevels)">
+                            <b-iconstack v-b-tooltip.hover :title="setLevelTitle">
+                                <b-icon-chevron-double-right scale="0.75"></b-icon-chevron-double-right>
+                            </b-iconstack>
+                        </b-link>
+                    </b-th>
                 </b-tr>
             </b-thead>
             <TableHeaderRow value="Hero Equipment" name="heroEquipment" :show="show['heroEquipment']" @show-hide="setShowHide"></TableHeaderRow>
@@ -101,6 +108,7 @@
                 noRecipes: false,
                 levels: Array.from(new Array(this.options.numLevels), (x, i) => i + this.options.level),
                 recipes: {},
+                setLevelTitle: `Advance to next level (${this.options.level + this.options.numLevels})`,
                 show: {
                     consumables: false,
                     heroEquipment: false,
@@ -162,23 +170,25 @@
                 this.isBusy = false
             },
             getRecipesByLevel(recipesDictionary, key, nameSearches = []) {
-                let recipesByLevel = Array.from(new Array(this.options.numLevels), () => [])
+                let recipesByLevel = {next: [], recipes: Array.from(new Array(this.options.numLevels), () => [])}
 
                 if (key in recipesDictionary) {
                     for (const recipe of recipesDictionary[key].recipes) {
                         if (nameSearches.length === 0)
-                            recipesByLevel[recipe.level - this.options.level].push(recipe)
+                            recipesByLevel.recipes[recipe.level - this.options.level].push(recipe)
                         else {
                             for (const nameSearch of nameSearches) {
                                 if (recipe.name.indexOf(nameSearch) !== -1)
-                                    recipesByLevel[recipe.level - this.options.level].push(recipe)
+                                    recipesByLevel.recipes[recipe.level - this.options.level].push(recipe)
                             }
                         }
                     }
 
                     let currentRecipes = []
-                    if (nameSearches.length === 0)
+                    if (nameSearches.length === 0) {
                         currentRecipes = recipesDictionary[key].previous
+                        recipesByLevel.next = recipesDictionary[key].next
+                    }
                     else {
                         for (const recipe of recipesDictionary[key].previous) {
                             if (nameSearches.length > 0) {
@@ -188,22 +198,30 @@
                                 }
                             }
                         }
+                        for (const recipe of recipesDictionary[key].next) {
+                            if (nameSearches.length > 0) {
+                                for (const nameSearch of nameSearches) {
+                                    if (recipe.name.indexOf(nameSearch) !== -1)
+                                        recipesByLevel.next.push(recipe)
+                                }
+                            }
+                        }
                     }
 
-                    for (const index in recipesByLevel) {
-                        if (recipesByLevel[index].length === 0) {
+                    for (const index in recipesByLevel.recipes) {
+                        if (recipesByLevel.recipes[index].length === 0) {
                             for (const recipe of currentRecipes) {
-                                recipesByLevel[index].push(recipe)
+                                recipesByLevel.recipes[index].push(recipe)
                             }
                         }
                         else {
-                            currentRecipes = recipesByLevel[index]
+                            currentRecipes = recipesByLevel.recipes[index]
                         }
                     }
                 }
 
                 // Sorting - sort by class, then sub-class, then skill, then rarity
-                for (const recipeList of recipesByLevel) {
+                for (const recipeList of recipesByLevel.recipes) {
 
                     recipeList.sort(function (a, b) {
                         let sortKeys = ['item.class.name', 'item.subclass.name', 'skill.name', 'item.rarity.name']
@@ -219,7 +237,7 @@
                 return recipesByLevel
             },
             initializeRecipes() {
-                let defaultRecipes = Array.from(new Array(this.options.numLevels), () => [])
+                let defaultRecipes = {next: [], recipes: Array.from(new Array(this.options.numLevels), () => [])}
 
                 this.recipes = {
                     heroEquipment: {
@@ -261,12 +279,15 @@
 
                 this.noRecipes = true
             },
+            setLevel(newLevel) {
+                this.options.level = newLevel
+            },
             setShowHide(name) {
                 this.show[name] = !this.show[name]
             },
             showOrHideSection(name) {
                 for (const property in this.recipes[name]) {
-                    for (const recipes of this.recipes[name][property]) {
+                    for (const recipes of this.recipes[name][property].recipes) {
                         for (const recipesForLevel of recipes) {
                             if (recipesForLevel.length !== 0 ) {
                                 this.show[name] = true

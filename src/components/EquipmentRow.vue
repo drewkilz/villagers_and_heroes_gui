@@ -12,7 +12,7 @@
                 <div v-if="description" v-b-tooltip.hover :title="description">{{ getRowHeaderDescription() }}</div>
             </div>
         </b-th>
-        <b-td v-for="(recipesForLevel, index) in recipes" :key="index">
+        <b-td v-for="(recipesForLevel, index) in recipes.recipes" :key="index">
             <div v-for="(recipe, recipeIndex) in recipesForLevel" :key="recipeIndex" :class="firstOccurrence(recipe, index) ? 'firstOccurrence' : 'notFirstOccurrence'" style="border-width: thin; border-radius: 5px; margin-bottom: 5px; padding: 5px">
                 <div>
                     <RecipeName :recipe="recipe" :index="getIndex(name, index, recipeIndex)" :preface="getPreface(recipe)"></RecipeName>
@@ -36,6 +36,12 @@
                 </div>
             </div>
         </b-td>
+        <b-td class="text-center align-middle">
+            <b-link v-if="recipes.next.length > 0" href="#" v-on:click="setLevel(recipes.next[0].level)"
+                    v-b-tooltip.hover :title="setLevelTitle">
+                {{ recipes.next[0].level }}
+            </b-link>
+        </b-td>
     </b-tr>
 </template>
 
@@ -55,7 +61,7 @@
                 required: true
             },
             recipes: {
-                type: Array,
+                type: Object,
                 required: true
             },
             description: {
@@ -199,9 +205,19 @@
             },
             inCraftingList(recipe) {
                 return recipe.name in this.craftingList.list
+            },
+            setLevel(newLevel) {
+                this.options.level = newLevel
             }
         },
         created() {
+        computed: {
+            setLevelTitle() {
+                if (this.recipes.next.length > 0)
+                    return `Next item available at level ${this.recipes.next[0].level}`
+
+                return ''
+            }
         },
         watch: {
             // 'options.level'() {
