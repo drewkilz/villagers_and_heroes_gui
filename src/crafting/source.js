@@ -27,7 +27,6 @@ export function getSource(object) {
             source.text += `: ${object.type.name}`
         }
 
-
         if (object.type.name.endsWith('Leather'))
             source.text += `, Beasts (${getSourceLevelRangeText(object.level)})`
     } else if (object.name === SALVAGE_KIT_NAME) {
@@ -48,6 +47,10 @@ export function getSource(object) {
         source.text = `Gardening (${object.level})`
     else if (object.name.endsWith('Pelt'))
         source.text = `Ranching: Boars (${getSourceLevelRangeRanchingText(object.level)}), Beasts (${getSourceLevelRangeText(object.level)})`
+    else if (object.name.endsWith('Egg'))
+        source.text = `Ranching: Chickens (${getSourceLevelRangeRanchingText(object.level)})`
+    else if (object.name.endsWith('Ham'))
+        source.text = `Ranching: Pigs (${getSourceLevelRangeRanchingText(object.level)})`
     else if (object.type.name.endsWith(ItemType.TOOL)) {
         source.link = getWikiLink('Tool Vendor')
         source.text = 'Tool Vendor'
