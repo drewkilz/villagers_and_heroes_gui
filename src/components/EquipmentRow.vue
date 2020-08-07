@@ -210,7 +210,6 @@
                 this.options.level = newLevel
             }
         },
-        created() {
         computed: {
             setLevelTitle() {
                 if (this.recipes.next.length > 0)
@@ -219,20 +218,6 @@
                 return ''
             }
         },
-        watch: {
-            // 'options.level'() {
-            //     this.displayEquipment()
-            // },
-            // 'options.heroClasses'() {
-            //     this.displayEquipment()
-            // },
-            // 'options.heroSubClasses'() {
-            //     this.displayEquipment()
-            // },
-            // 'options.villagerClasses'() {
-            //     this.displayEquipment()
-            // }
-        }
     }
 </script>
 
