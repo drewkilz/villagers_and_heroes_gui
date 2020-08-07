@@ -108,7 +108,6 @@
                 noRecipes: false,
                 levels: Array.from(new Array(this.options.numLevels), (x, i) => i + this.options.level),
                 recipes: {},
-                setLevelTitle: `Advance to next level (${this.options.level + this.options.numLevels})`,
                 show: {
                     consumables: false,
                     heroEquipment: false,
@@ -308,6 +307,11 @@
         },
         created() {
             this.initializeRecipes()
+        },
+        computed: {
+            setLevelTitle() {
+                return `Advance to next level (${this.options.level + this.options.numLevels})`
+            }
         },
         watch: {
             'options.level'() {
