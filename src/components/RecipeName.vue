@@ -11,6 +11,7 @@
                 placement="bottomright"
                 triggers="hover">
             <template v-slot:title>{{ recipe.name }}</template>
+            <div>Level {{ recipe.level }}</div>
             <div v-if="preface" v-html="preface"></div>
             <div><u>Ingredients</u></div>
             <ul>
